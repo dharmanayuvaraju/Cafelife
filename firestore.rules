@@ -1,0 +1,100 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: menu
+    // Document ID: {itemId}
+    // Fields:
+    //   - name: string (e.g. "Special Hyderabadi Irani Chai")
+    //   - price: number (price in INR, must be > 0)
+    //   - category: string ("Beverages", "Bakery", "Snacks")
+    //   - available: bool (item availability flag)
+    //   - discountPercent: number (optional, 0 to 90)
+    //
+    // Collection: owners
+    // Document ID: {uid} (Firebase Auth UID of the cafe owner)
+    // Fields:
+    //   - Marker document; existence grants owner administrative privileges
+    //
+    // Collection: orders
+    // Document ID: {orderId}
+    // Fields:
+    //   - userId: string (UID of customer who placed the order)
+    //   - customerName: string (nickname called out by barista)
+    //   - userEmail: string (email or display name of customer)
+    //   - items: list (array of ordered items with name, qty, price)
+    //   - total: number (total price in INR)
+    //   - status: string ("received" | "preparing" | "ready" | "completed" | "cancelled")
+    //   - createdAt: timestamp (server-side creation timestamp)
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    // Checks if the incoming request is authenticated with Firebase Auth
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Checks if the authenticated user is registered as an authorized cafe owner
+    function isOwner() {
+      return isSignedIn() && exists(/databases/$(database)/documents/owners/$(request.auth.uid));
+    }
+
+    // ===============================================================
+    // Collection Rules
+    // ===============================================================
+
+    // 1. Menu Collection:
+    // - Public read access allows all visitors and customers to view menu items
+    // - Only verified cafe owners can write (create, update) menu items
+    // - On write, validate name is string, price is number > 0, and optional discountPercent (0 to 90)
+    match /menu/{itemId} {
+      allow read: if true;
+      allow write: if isOwner() &&
+                   request.resource.data.name is string &&
+                   request.resource.data.price is number &&
+                   request.resource.data.price > 0 &&
+                   (!('discountPercent' in request.resource.data) ||
+                    (request.resource.data.discountPercent is number &&
+                     request.resource.data.discountPercent >= 0 &&
+                     request.resource.data.discountPercent <= 90));
+    }
+
+    // 2. Owners Collection:
+    // - A user can read only their own marker document to verify owner status
+    // - Client writes are completely disabled; owner documents must be provisioned
+    //   via Firebase Console or Admin SDK
+    match /owners/{uid} {
+      allow read: if isSignedIn() && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    // 3. Orders Collection:
+    // - Create: Must be signed-in, userId must match authenticated user, and initial status must be "received"
+    // - Read: Allowed for the customer who created the order or any authorized cafe owner
+    // - Update: Owners only; strictly restricted to updating the status field to 'received', 'preparing', 'ready', 'completed', 'cancelled'
+    // - Delete: Prohibited for all users to preserve audit and financial records
+    match /orders/{orderId} {
+      allow create: if isSignedIn() &&
+                       request.resource.data.userId == request.auth.uid &&
+                       request.resource.data.status == "received";
+
+      allow read: if isSignedIn() &&
+                     (resource.data.userId == request.auth.uid || isOwner());
+
+      allow update: if isOwner() &&
+                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']) &&
+                       request.resource.data.status in ['received', 'preparing', 'ready', 'completed', 'cancelled'];
+
+      allow delete: if false;
+    }
+  }
+}

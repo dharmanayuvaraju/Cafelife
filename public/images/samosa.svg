@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260">
+  <defs>
+    <linearGradient id="smBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2d170c" />
+      <stop offset="100%" stop-color="#4d2714" />
+    </linearGradient>
+    <linearGradient id="samosaCrust" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe1ad" />
+      <stop offset="45%" stop-color="#e09641" />
+      <stop offset="100%" stop-color="#995011" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="260" fill="url(#smBg)" />
+  <circle cx="200" cy="130" r="95" fill="#f39c12" opacity="0.12" />
+  <!-- Plate -->
+  <ellipse cx="200" cy="190" rx="130" ry="24" fill="#140b06" />
+  <ellipse cx="200" cy="186" rx="122" ry="20" fill="#f5ede3" stroke="#d5c1ad" stroke-width="2" />
+  <!-- Mint Chutney dollop -->
+  <ellipse cx="265" cy="182" rx="24" ry="10" fill="#389e0d" />
+  <ellipse cx="267" cy="180" rx="16" ry="6" fill="#73d13d" />
+  <!-- Samosa 1 (Pyramid Triangle) -->
+  <polygon points="120,185 220,185 170,90" fill="#582a10" opacity="0.4" transform="translate(6, 6)" />
+  <polygon points="120,185 220,185 170,90" fill="url(#samosaCrust)" stroke="#c28236" stroke-width="2" />
+  <!-- Center seam ridge -->
+  <line x1="170" y1="90" x2="170" y2="185" stroke="#753d07" stroke-width="2" opacity="0.6" />
+  <!-- Samosa 2 (Tilted in background) -->
+  <polygon points="190,175 270,175 230,105" fill="url(#samosaCrust)" stroke="#fbe4b5" stroke-width="1.5" />
+</svg>
+

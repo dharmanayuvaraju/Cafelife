@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Orders - CafeLive Hyderabad</title>
+  
+  <!-- Google Fonts Preconnect & Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="brand" aria-label="CafeLive Hyderabad Home">
+        <img src="images/logo.png" alt="CafeLive Logo" class="brand-logo-img" width="40" height="40">
+        <span>CafeLive</span>
+        <span class="brand-loc">Hyderabad</span>
+      </a>
+      <nav aria-label="Customer Navigation">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Menu</a></li>
+          <li><a href="orders.html" class="nav-link active">My Orders</a></li>
+        </ul>
+      </nav>
+      <div id="authPill" class="user-info">
+        <span>Guest</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container" style="padding-top: var(--space-xl); padding-bottom: var(--space-2xl);">
+    <section class="section-title-wrap" style="text-align: left; margin-bottom: var(--space-lg); max-width: 100%;">
+      <span class="section-badge">Live Kitchen Queue</span>
+      <h1 class="section-title" style="margin-top: 0.25rem;">My Orders 📋</h1>
+      <p>Watch your order status update in real-time as our barista brews and prepares your selection.</p>
+    </section>
+
+    <!-- Sign In Required Prompt (Shown when logged out) -->
+    <div id="loginRequiredCard" class="card" style="display: none; text-align: center; padding: 3rem 1.5rem;">
+      <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">👤</div>
+      <h2 class="card-title" style="margin-bottom: 0.5rem;">Sign In Required</h2>
+      <p style="color: var(--color-text-muted); margin-bottom: 1.5rem; max-width: 480px; margin-inline: auto;">
+        Please sign in with your email or Google account to track your orders live on this device.
+      </p>
+      <a href="index.html" class="btn btn-primary">Go to Sign In &rarr;</a>
+    </div>
+
+    <!-- Active Orders Container -->
+    <div id="ordersContainer" style="display: none;">
+      <div class="section-header">
+        <h2 class="card-title" style="font-size: 1.35rem; margin: 0;">Order History &amp; Live Tracking</h2>
+        <span id="ordersLiveSync" class="badge badge-ready">● Live Sync</span>
+      </div>
+
+      <!-- Error banner if needed -->
+      <div id="ordersErrorAlert" class="alert alert-error" style="display: none;" role="alert"></div>
+
+      <!-- Orders List -->
+      <div id="ordersList" class="orders-list">
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Listening for real-time order updates...</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-bottom" style="border: none; padding-top: 0;">
+        <div>&copy; 2026 CafeLive Hyderabad. Built with vanilla HTML, modern CSS &amp; modular Firebase.</div>
+        <div>
+          <a href="index.html" style="color: #ab9b90; text-decoration: none;">&larr; Return to Menu</a>
+          <a href="owner.html" style="color: #ab9b90; text-decoration: none; margin-left: 1.5rem;">Staff Portal &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { subscribeToAuthState, setupHeaderAuthPill } from "./js/auth.js?v=20261113b";
+    import { subscribeToUserOrders, formatOrderDate } from "./js/orders.js?v=20261113b";
+    import { formatPrice } from "./js/menu.js?v=20261113b";
+
+    // Setup global header user info
+    setupHeaderAuthPill("authPill");
+
+    const loginRequiredCard = document.getElementById("loginRequiredCard");
+    const ordersContainer = document.getElementById("ordersContainer");
+    const ordersList = document.getElementById("ordersList");
+    const ordersErrorAlert = document.getElementById("ordersErrorAlert");
+
+    let unsubscribeOrders = null;
+
+    // Helper to get status badge markup
+    function getStatusBadge(status) {
+      switch (status) {
+        case "received":
+          return `<span class="badge badge-received">📥 Order Received</span>`;
+        case "preparing":
+          return `<span class="badge badge-preparing">👨‍🍳 Preparing in Kitchen</span>`;
+        case "ready":
+          return `<span class="badge badge-ready">☕ Ready for Pickup!</span>`;
+        case "completed":
+          return `<span class="badge badge-ready" style="background:#d1fae5; color:#065f46; border-color:#a7f3d0;">✅ Picked Up</span>`;
+        case "cancelled":
+          return `<span class="badge badge-soldout" style="background:#fee2e2; color:#991b1b; border-color:#fca5a5;">❌ Order Cancelled</span>`;
+        default:
+          return `<span class="badge badge-received">${status || "Processing"}</span>`;
+      }
+    }
+
+    // Helper to generate the 3-step live progress indicator with consistent icons
+    function renderStepper(status) {
+      if (status === "cancelled") {
+        const cancelledDiv = document.createElement("div");
+        cancelledDiv.className = "order-stepper";
+        cancelledDiv.style.justifyContent = "center";
+        cancelledDiv.style.background = "#fff1f2";
+        cancelledDiv.style.borderColor = "#fecdd3";
+        cancelledDiv.innerHTML = `<span style="color: #9f1239; font-weight: 600; font-size: 0.88rem;">❌ This order has been cancelled</span>`;
+        return cancelledDiv;
+      }
+
+      const isCompleted = status === "completed";
+      const isReceivedDone = status === "received" || status === "preparing" || status === "ready" || isCompleted;
+      const isPreparingDone = status === "preparing" || status === "ready" || isCompleted;
+      const isReadyDone = status === "ready" || isCompleted;
+
+      const isReceivedActive = status === "received";
+      const isPreparingActive = status === "preparing";
+      const isReadyActive = status === "ready";
+
+      const stepper = document.createElement("div");
+      stepper.className = "order-stepper";
+      stepper.setAttribute("aria-label", `Current stage: ${status}`);
+
+      // Node 1: Received (Icon: 📥 or ✓)
+      const node1 = document.createElement("div");
+      node1.className = `stepper-node ${isReceivedActive ? "is-active" : (isReceivedDone ? "is-done" : "")}`;
+      node1.innerHTML = `
+        <span class="stepper-bubble">${isReceivedDone && !isReceivedActive ? "✓" : "📥"}</span>
+        <span class="stepper-label">Received</span>
+      `;
+
+      // Track 1
+      const track1 = document.createElement("div");
+      track1.className = `stepper-track ${isPreparingDone ? "is-filled" : (isPreparingActive ? "is-active" : "")}`;
+
+      // Node 2: Preparing (Icon: 👨‍🍳 or ✓)
+      const node2 = document.createElement("div");
+      node2.className = `stepper-node ${isPreparingActive ? "is-active" : (isPreparingDone ? "is-done" : "")}`;
+      node2.innerHTML = `
+        <span class="stepper-bubble">${isPreparingDone && !isPreparingActive ? "✓" : "👨‍🍳"}</span>
+        <span class="stepper-label">Preparing</span>
+      `;
+
+      // Track 2
+      const track2 = document.createElement("div");
+      track2.className = `stepper-track ${isReadyDone ? "is-filled" : (isReadyActive ? "is-active" : "")}`;
+
+      // Node 3: Ready / Picked Up (Icon: ☕ or ✓)
+      const node3 = document.createElement("div");
+      node3.className = `stepper-node ${isReadyActive ? "is-active is-done" : (isCompleted ? "is-done" : "")}`;
+      node3.innerHTML = `
+        <span class="stepper-bubble">${isCompleted ? "✓" : "☕"}</span>
+        <span class="stepper-label">${isCompleted ? "Picked Up" : "Ready"}</span>
+      `;
+
+      stepper.appendChild(node1);
+      stepper.appendChild(track1);
+      stepper.appendChild(node2);
+      stepper.appendChild(track2);
+      stepper.appendChild(node3);
+
+      return stepper;
+    }
+
+    // Render list of orders securely without XSS
+    function renderOrders(orders) {
+      ordersList.innerHTML = "";
+
+      if (orders.length === 0) {
+        const emptyDiv = document.createElement("div");
+        emptyDiv.className = "empty-state";
+        emptyDiv.innerHTML = `
+          <h3 style="margin-bottom: 0.5rem; color: var(--color-primary);">No Orders Placed Yet</h3>
+          <p style="margin-bottom: 1rem;">Craving something delicious? Order some Irani chai and bakery snacks!</p>
+          <a href="index.html" class="btn btn-primary btn-sm">Explore Hyderabad Menu</a>
+        `;
+        ordersList.appendChild(emptyDiv);
+        return;
+      }
+
+      orders.forEach((order) => {
+        const card = document.createElement("article");
+        card.className = "order-card";
+
+        // Header: Order ID & Timestamp & Status Badge
+        const header = document.createElement("div");
+        header.className = "order-card-header";
+
+        const leftInfo = document.createElement("div");
+        const orderIdSpan = document.createElement("div");
+        orderIdSpan.className = "order-id";
+        orderIdSpan.textContent = order.customerName
+          ? `Order #${order.id.slice(0, 7)} • 👤 ${order.customerName}`
+          : `Order #${order.id.slice(0, 7)}`;
+
+        const dateSpan = document.createElement("div");
+        dateSpan.className = "order-timestamp";
+        dateSpan.textContent = formatOrderDate(order.createdAt);
+
+        leftInfo.appendChild(orderIdSpan);
+        leftInfo.appendChild(dateSpan);
+
+        const statusWrapper = document.createElement("div");
+        statusWrapper.innerHTML = getStatusBadge(order.status);
+
+        header.appendChild(leftInfo);
+        header.appendChild(statusWrapper);
+        card.appendChild(header);
+
+        // Visual 3-Stage Progress Stepper
+        card.appendChild(renderStepper(order.status));
+
+        // Items list
+        const itemsUl = document.createElement("ul");
+        itemsUl.className = "order-items-list";
+
+        if (Array.isArray(order.items)) {
+          order.items.forEach((item) => {
+            const li = document.createElement("li");
+            li.className = "order-item-line";
+
+            const nameQty = document.createElement("span");
+            nameQty.textContent = `${item.qty} × ${item.name}`;
+
+            const lineTotal = document.createElement("span");
+            lineTotal.style.fontWeight = "600";
+            lineTotal.textContent = formatPrice((item.qty || 1) * (item.price || 0));
+
+            li.appendChild(nameQty);
+            li.appendChild(lineTotal);
+            itemsUl.appendChild(li);
+          });
+        }
+        card.appendChild(itemsUl);
+
+        // Footer: Total
+        const footer = document.createElement("div");
+        footer.className = "order-footer";
+        const totalLabel = document.createElement("span");
+        totalLabel.textContent = "Order Total:";
+        const totalValue = document.createElement("span");
+        totalValue.style.color = "var(--color-primary)";
+        totalValue.style.fontSize = "1.25rem";
+        totalValue.style.fontFamily = "var(--font-heading)";
+        totalValue.textContent = formatPrice(order.total || 0);
+
+        footer.appendChild(totalLabel);
+        footer.appendChild(totalValue);
+        card.appendChild(footer);
+
+        ordersList.appendChild(card);
+      });
+    }
+
+    // Subscribe to Auth State
+    subscribeToAuthState((user) => {
+      if (unsubscribeOrders) {
+        unsubscribeOrders();
+        unsubscribeOrders = null;
+      }
+
+      if (user) {
+        loginRequiredCard.style.display = "none";
+        ordersContainer.style.display = "block";
+
+        unsubscribeOrders = subscribeToUserOrders(
+          user.uid,
+          (orders) => {
+            ordersErrorAlert.style.display = "none";
+            renderOrders(orders);
+          },
+          (error) => {
+            ordersErrorAlert.textContent = "Failed to load orders: " + error.message;
+            ordersErrorAlert.style.display = "block";
+          }
+        );
+      } else {
+        loginRequiredCard.style.display = "block";
+        ordersContainer.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>

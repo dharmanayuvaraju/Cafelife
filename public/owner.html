@@ -1,0 +1,2025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kitchen &amp; Owner Portal - CafeLive Hyderabad</title>
+  
+  <!-- Google Fonts Preconnect & Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body style="background-color: #f7f3ee;">
+  <!-- Dedicated Kitchen & Staff Header -->
+  <header class="header" style="background-color: #ffffff; border-bottom: 2px solid var(--color-primary);">
+    <div class="header-inner">
+      <a href="owner.html" class="brand" aria-label="CafeLive Kitchen Portal">
+        <img src="images/logo.png" alt="CafeLive Logo" class="brand-logo-img" width="40" height="40">
+        <span>CafeLive</span>
+        <span class="brand-loc" style="background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca;">
+          Staff Portal
+        </span>
+      </a>
+      <nav aria-label="Staff Navigation">
+        <ul class="nav-links">
+          <li><a href="owner.html" class="nav-link active">Owner Portal</a></li>
+          <li><a href="index.html" class="nav-link">&larr; Customer View</a></li>
+        </ul>
+      </nav>
+      <div id="authPill" class="user-info">
+        <span>Staff Area</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container" style="max-width: 1240px; padding-top: var(--space-xl); padding-bottom: var(--space-2xl);">
+    <!-- Dedicated Staff Login Card (Shown when not authenticated) -->
+    <div id="staffLoginCard" class="card auth-card" style="display: none; padding: 2.5rem 1.5rem; text-align: center;">
+      <div style="font-size: 2.8rem; margin-bottom: 0.5rem;">👨‍🍳</div>
+      <h2 class="card-title" style="margin-bottom: 0.5rem;">Staff &amp; Barista Portal</h2>
+      <p style="color: var(--color-text-muted); font-size: 0.92rem; margin-bottom: 1.5rem;">
+        Please sign in with an authorized cafe owner or staff account to access the kitchen queue and menu management.
+      </p>
+
+      <div id="staffLoginAlert" class="alert alert-error" style="display: none;" role="alert"></div>
+
+      <form id="staffLoginForm" novalidate style="text-align: left;">
+        <div class="form-group">
+          <label for="staffEmail" class="form-label">Staff Email</label>
+          <input type="email" id="staffEmail" class="form-input" placeholder="owner@cafelive.com" required autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="staffPassword" class="form-label">Password</label>
+          <input type="password" id="staffPassword" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+        <button type="submit" id="staffLoginBtn" class="btn btn-primary btn-block" style="margin-top: 1rem;">
+          Sign In to Kitchen Board
+        </button>
+      </form>
+
+      <!-- Divider -->
+      <div class="divider" style="margin: 1.25rem 0;">or</div>
+
+      <!-- Google Sign In Button for Staff -->
+      <button type="button" id="staffGoogleLoginBtn" class="btn btn-google btn-block">
+        <svg class="google-icon" viewBox="0 0 24 24" aria-hidden="true" width="18" height="18">
+          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.15z"/>
+          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.11 0-5.74-2.11-6.68-4.96H1.21v3.15C3.26 21.4 7.36 24 12 24z"/>
+          <path fill="#FBBC05" d="M5.32 14.24c-.24-.72-.38-1.5-.38-2.24s.14-1.52.38-2.24V6.61H1.21C.44 8.14 0 9.99 0 12s.44 3.86 1.21 5.39l4.11-3.15z"/>
+          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.36 0 3.26 2.6 1.21 6.61l4.11 3.15c.94-2.85 3.57-4.96 6.68-4.96z"/>
+        </svg>
+        <span>Continue with Google</span>
+      </button>
+
+      <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed var(--color-border);">
+        <a href="index.html" class="btn btn-outline btn-sm">&larr; Return to Customer Menu</a>
+      </div>
+    </div>
+
+    <!-- Non-Staff Account Notice (Logged in as customer, not owner) -->
+    <div id="notStaffCard" class="card" style="display: none; text-align: center; padding: 2.5rem 1.5rem; max-width: 620px; margin-inline: auto;">
+      <div style="font-size: 3rem; margin-bottom: 0.5rem;">🔒</div>
+      <h2 class="card-title" style="color: var(--color-primary); margin-bottom: 0.5rem;">
+        Restricted Kitchen Area
+      </h2>
+      <p style="color: var(--color-text-muted); margin-bottom: 1rem;">
+        You are currently signed in as <strong id="loggedCustomerEmail"></strong>. This portal is restricted to CafeLive kitchen staff and owners.
+      </p>
+
+      <div style="display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap;">
+        <a href="index.html" class="btn btn-primary">Go to Customer Menu</a>
+        <button type="button" id="switchStaffBtn" class="btn btn-outline">Sign In with Staff Account</button>
+      </div>
+    </div>
+
+    <!-- Authorized Live Kitchen Board & Management Portal -->
+    <div id="boardContainer" style="display: none;">
+      
+      <!-- Owner Navigation Tabs -->
+      <nav class="owner-nav-tabs" aria-label="Owner Management Tabs">
+        <button id="tabOrdersViewBtn" class="owner-tab-btn active" type="button">
+          <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+          Live Orders Queue (<span id="tabOrderCountBadge">0</span>)
+        </button>
+        <button id="tabHistoryViewBtn" class="owner-tab-btn" type="button">
+          <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          Order History &amp; Sales
+        </button>
+        <button id="tabAddMenuViewBtn" class="owner-tab-btn" type="button">
+          <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Add Menu Item &amp; Catalog
+        </button>
+      </nav>
+
+      <!-- SECTION 1: LIVE ORDERS QUEUE -->
+      <section id="ordersViewSection">
+        <div class="section-header" style="background-color: #ffffff; padding: 1.25rem 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border); box-shadow: var(--shadow-xs); margin-bottom: var(--space-lg);">
+          <div>
+            <h1 class="card-title" style="font-size: 1.6rem; margin-bottom: 0.25rem;">Barista &amp; Kitchen Live Queue</h1>
+            <p style="color: var(--color-text-muted); font-size: 0.92rem; margin: 0;">
+              Move orders smoothly from Received &rarr; Preparing &rarr; Ready. Nicknames are highlighted for counter callouts.
+            </p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+            <button id="ownerSyncMenuBtn" type="button" class="btn btn-outline btn-sm" title="Populate or reload the 16 authentic Hyderabad cafe items with INR (₹) prices">
+              <svg class="icon-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              Reload 16 Hyderabad Items (₹)
+            </button>
+            <span class="badge badge-ready">● Real-Time Sync</span>
+            <span id="totalActiveOrdersBadge" class="badge badge-preparing" style="font-weight: 800;">0 active orders</span>
+          </div>
+        </div>
+
+        <div id="ownerErrorAlert" class="alert alert-error" style="display: none;" role="alert"></div>
+
+        <!-- 3-Column Kanban Board -->
+        <div class="kanban-board">
+          <!-- 1. Received Column -->
+          <section class="kanban-column" id="colReceived" aria-labelledby="titleReceived">
+            <div class="kanban-column-header">
+              <h2 id="titleReceived" class="kanban-column-title">
+                <svg class="icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+                Received
+              </h2>
+              <span id="countReceived" class="kanban-counter">0</span>
+            </div>
+            <div id="cardsReceived" class="kanban-cards"></div>
+          </section>
+
+          <!-- 2. Preparing Column -->
+          <section class="kanban-column" id="colPreparing" aria-labelledby="titlePreparing">
+            <div class="kanban-column-header">
+              <h2 id="titlePreparing" class="kanban-column-title">
+                <svg class="icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6v-7.13z"></path><line x1="6" y1="17" x2="18" y2="17"></line></svg>
+                Preparing
+              </h2>
+              <span id="countPreparing" class="kanban-counter">0</span>
+            </div>
+            <div id="cardsPreparing" class="kanban-cards"></div>
+          </section>
+
+          <!-- 3. Ready Column -->
+          <section class="kanban-column" id="colReady" aria-labelledby="titleReady">
+            <div class="kanban-column-header">
+              <h2 id="titleReady" class="kanban-column-title">
+                <svg class="icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+                Ready for Pickup
+              </h2>
+              <span id="countReady" class="kanban-counter">0</span>
+            </div>
+            <div id="cardsReady" class="kanban-cards"></div>
+          </section>
+        </div>
+      </section>
+
+      <!-- SECTION 2: ORDER HISTORY & SALES SUMMARY -->
+      <section id="historyViewSection" style="display: none;">
+        <!-- Simple Sales Summary Bar at Top of History Tab -->
+        <div class="card" style="margin-bottom: var(--space-lg); padding: 1.5rem; background: #ffffff; border-radius: var(--radius-lg); border: 1px solid var(--color-border); box-shadow: var(--shadow-xs);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <h2 class="card-title" style="font-size: 1.35rem; margin: 0;">Today&rsquo;s Cafe Sales Summary</h2>
+              <p style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0.2rem 0 0 0;">
+                Calculated live in JavaScript from completed orders placed today.
+              </p>
+            </div>
+            <span class="badge badge-ready">● Live Metrics</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <!-- Stat 1: Completed Orders Count -->
+            <div style="background: var(--color-surface-subtle); padding: 1rem 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.35rem;">
+                Today&rsquo;s Completed Orders
+              </span>
+              <span id="salesTodayCount" style="font-size: 1.85rem; font-weight: 800; color: var(--color-primary); font-family: var(--font-heading);">
+                0
+              </span>
+            </div>
+
+            <!-- Stat 2: Total Sales in INR -->
+            <div style="background: var(--color-surface-subtle); padding: 1rem 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.35rem;">
+                Today&rsquo;s Total Sales (₹)
+              </span>
+              <span id="salesTodayRevenue" style="font-size: 1.85rem; font-weight: 800; color: #059669; font-family: var(--font-heading);">
+                ₹0
+              </span>
+            </div>
+
+            <!-- Stat 3: Best-Selling Item -->
+            <div style="background: var(--color-surface-subtle); padding: 1rem 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.35rem;">
+                Best-Selling Item
+              </span>
+              <span id="salesTopItem" style="font-size: 1.2rem; font-weight: 700; color: var(--color-primary); line-height: 1.3; display: block;">
+                None yet
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order History Table (Latest 50 completed and cancelled orders) -->
+        <div class="card" style="padding: 1.5rem; background: #ffffff; border-radius: var(--radius-lg); border: 1px solid var(--color-border); box-shadow: var(--shadow-xs);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <h2 class="card-title" style="font-size: 1.35rem; margin: 0;">Completed &amp; Cancelled Orders</h2>
+              <p style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0.2rem 0 0 0;">
+                Latest 50 resolved orders, sorted chronologically in JavaScript.
+              </p>
+            </div>
+            <span id="historyOrdersCountBadge" class="badge">0 recorded</span>
+          </div>
+
+          <div style="overflow-x: auto;">
+            <table class="catalog-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+              <thead>
+                <tr style="border-bottom: 2px solid var(--color-border);">
+                  <th style="padding: 0.75rem 0.5rem;">Customer Nickname</th>
+                  <th style="padding: 0.75rem 0.5rem;">Items Ordered</th>
+                  <th style="padding: 0.75rem 0.5rem;">Total (₹)</th>
+                  <th style="padding: 0.75rem 0.5rem;">Order Time</th>
+                  <th style="padding: 0.75rem 0.5rem;">Status</th>
+                </tr>
+              </thead>
+              <tbody id="historyTableBody">
+                <tr>
+                  <td colspan="5" style="text-align: center; padding: 2rem; color: var(--color-text-muted);">
+                    Loading order history...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: ADD MENU ITEM & MANAGE CATALOG -->
+      <section id="addMenuViewSection" style="display: none;">
+        <div class="section-header" style="background-color: #ffffff; padding: 1.25rem 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border); box-shadow: var(--shadow-xs); margin-bottom: var(--space-lg);">
+          <div>
+            <h2 class="card-title" style="font-size: 1.6rem; margin-bottom: 0.25rem;">Add New Menu Item ☕</h2>
+            <p style="color: var(--color-text-muted); font-size: 0.92rem; margin: 0;">
+              Publish new beverages, snacks, or bakery treats with live photo preview. Changes update instantly on customer screens.
+            </p>
+          </div>
+          <div>
+            <button id="quickReloadBtn" type="button" class="btn btn-outline btn-sm">
+              🔄 Reload 16 Authentic Items (INR ₹)
+            </button>
+          </div>
+        </div>
+
+        <div id="addMenuAlert" class="alert" style="display: none;" role="alert"></div>
+
+        <!-- Two Column Layout: Form on Left, Live Customer Preview on Right -->
+        <div class="add-menu-layout">
+          <!-- Form Card -->
+          <div class="card" style="margin-bottom: 0;">
+            <h3 class="card-title" style="font-size: 1.25rem; margin-bottom: 1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem;">
+              📝 Item Details
+            </h3>
+
+            <form id="addMenuItemForm" novalidate>
+              <!-- Item Name -->
+              <div class="form-group">
+                <label for="newItemName" class="form-label">
+                  Item Name <span style="color: #ef4444;">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="newItemName"
+                  class="form-input"
+                  placeholder="e.g. Special Zafrani Malai Chai"
+                  maxlength="55"
+                  required
+                >
+              </div>
+
+              <!-- Category & Price in INR (2 cols) -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                  <label for="newItemCategory" class="form-label">Category</label>
+                  <select id="newItemCategory" class="form-input" style="height: 48px;">
+                    <option value="Beverages">Beverages (Chai / Coffee)</option>
+                    <option value="Bakery">Bakery &amp; Bakes</option>
+                    <option value="Snacks">Snacks &amp; Street Food</option>
+                    <option value="Food">Food &amp; Meals</option>
+                    <option value="Dessert">Dessert</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="newItemPrice" class="form-label">
+                    Price in INR (₹) <span style="color: #ef4444;">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    id="newItemPrice"
+                    class="form-input"
+                    placeholder="e.g. 50"
+                    min="1"
+                    max="5000"
+                    step="1"
+                    required
+                  >
+                </div>
+              </div>
+
+              <!-- Reference Image URL -->
+              <div class="form-group">
+                <label for="newItemImage" class="form-label">
+                  Reference Image URL or Local Path
+                </label>
+                <input
+                  type="text"
+                  id="newItemImage"
+                  class="form-input"
+                  placeholder="https://... or images/irani-chai.jpg"
+                >
+                <span style="font-size: 0.78rem; color: var(--color-text-muted); display: block; margin-top: 0.25rem;">
+                  Tip: Paste any high-res cafe photo URL, or tap any quick photo preset below.
+                </span>
+              </div>
+
+              <!-- 1-Click Cafe Presets -->
+              <div class="form-group">
+                <label class="form-label" style="font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  ⚡ Quick 1-Click Photo &amp; Detail Presets:
+                </label>
+                <div class="preset-pills-wrap">
+                  <button type="button" class="preset-pill-btn" data-cat="Beverages" data-img="images/irani-chai.jpg">☕ Irani Chai</button>
+                  <button type="button" class="preset-pill-btn" data-cat="Beverages" data-img="images/zafrani-chai.jpg">☕ Zafrani Chai</button>
+                  <button type="button" class="preset-pill-btn" data-cat="Beverages" data-img="images/filter-coffee.jpg">☕ Filter Coffee</button>
+                  <button type="button" class="preset-pill-btn" data-cat="Beverages" data-img="images/cold-coffee.jpg">🧊 Cold Coffee</button>
+                  <button type="button" class="preset-pill-btn" data-cat="Bakery" data-img="images/osmania.jpg">🍪 Osmania Biscuits</button>
+                  <button type="button" class="preset-pill-btn" data-cat="Bakery" data-img="images/bun-maska.jpg">🥯 Bun Maska</button>
+                  <button type="button" class="preset-pill-btn" data-cat="Snacks" data-img="images/luqmi.jpg">🥟 Keema Luqmi</button>
+                  <button type="button" class="preset-pill-btn" data-cat="Snacks" data-img="images/samosa.jpg">🥟 Samosa</button>
+                  <button type="button" class="preset-pill-btn" data-cat="Snacks" data-img="images/sandwich.jpg">🥪 Sandwich</button>
+                  <button type="button" class="preset-pill-btn" data-cat="Snacks" data-img="images/french-fries.jpg">🍟 French Fries</button>
+                </div>
+              </div>
+
+              <!-- Availability Toggle -->
+              <div style="margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem;">
+                <input type="checkbox" id="newItemAvailable" checked style="width: 18px; height: 18px; accent-color: var(--color-saffron); cursor: pointer;">
+                <label for="newItemAvailable" style="font-weight: 600; font-size: 0.92rem; cursor: pointer;">
+                  Available &amp; In-Stock (ready for customers to order)
+                </label>
+              </div>
+
+              <!-- Form Buttons -->
+              <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                <button type="submit" id="addMenuItemBtn" class="btn btn-primary" style="flex: 1;">
+                  Publish Item to Menu 🚀
+                </button>
+                <button type="button" id="resetItemFormBtn" class="btn btn-outline">
+                  Clear Form
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Live Customer Card Preview -->
+          <div class="card-preview-sticky">
+            <div class="card-preview-header">
+              <span>👁️ Live Customer Card Preview</span>
+              <span class="badge badge-ready">Real-time</span>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 1rem;">
+              Preview updates live as you type or pick a preset.
+            </p>
+
+            <div id="previewCardTarget" style="max-width: 320px; margin-inline: auto;">
+              <!-- Dynamic live card preview rendered by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Menu Items Catalog Management (Table) -->
+        <div class="card">
+          <div class="section-header" style="margin-bottom: 1rem;">
+            <div>
+              <h3 class="card-title" style="font-size: 1.25rem; margin-bottom: 0.25rem;">
+                📦 Current Cafe Menu Catalog (<span id="catalogItemCount">0</span> items)
+              </h3>
+              <p style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
+                Real-time synchronization with Firestore collection <code>menu</code>. Set exact prices, apply category discounts, or toggle stock directly.
+              </p>
+            </div>
+          </div>
+
+          <!-- Bulk Discount Tools Panel -->
+          <div class="bulk-discount-panel" style="background: #fffdf9; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1rem 1.25rem; margin-bottom: 1.25rem;">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;">
+              <div>
+                <h4 style="margin: 0 0 0.2rem 0; font-size: 0.95rem; font-weight: 700; color: var(--color-primary);">
+                  🏷️ Bulk Price &amp; Discount Tools
+                </h4>
+                <p style="margin: 0; font-size: 0.8rem; color: var(--color-text-muted);">
+                  Apply promotional discounts across an entire category or clear discounts in one click.
+                </p>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem;">
+                <label for="bulkCategorySelect" style="font-size: 0.82rem; font-weight: 600;">Category:</label>
+                <select id="bulkCategorySelect" class="form-input" style="height: 36px; padding: 0.25rem 0.6rem; font-size: 0.85rem; width: auto;">
+                  <option value="Snacks">Snacks</option>
+                  <option value="Beverages">Beverages</option>
+                  <option value="Bakery">Bakery</option>
+                  <option value="Food">Food</option>
+                  <option value="Dessert">Dessert</option>
+                  <option value="All">All Categories</option>
+                </select>
+
+                <label for="bulkDiscountInput" style="font-size: 0.82rem; font-weight: 600;">Discount:</label>
+                <div style="display: inline-flex; align-items: center; gap: 0.2rem;">
+                  <input type="number" id="bulkDiscountInput" min="1" max="90" step="1" value="10" class="form-input" style="height: 36px; width: 62px; padding: 0.25rem 0.4rem; font-size: 0.85rem; text-align: center;">
+                  <span style="font-size: 0.85rem; font-weight: 600;">%</span>
+                </div>
+
+                <button type="button" id="btnBulkApplyCategory" class="btn btn-primary btn-sm" style="padding: 0.35rem 0.85rem; font-size: 0.82rem;">
+                  Apply to Category
+                </button>
+                <button type="button" id="btnBulkClearAll" class="btn btn-outline btn-sm" style="padding: 0.35rem 0.85rem; font-size: 0.82rem; color: #dc2626; border-color: #fca5a5;">
+                  Clear All Discounts
+                </button>
+              </div>
+            </div>
+
+            <!-- Inline Confirmation Box (NO POPUPS) -->
+            <div id="bulkConfirmBox" style="display: none; margin-top: 0.85rem; padding: 0.75rem 1rem; background: #fff5eb; border: 1px solid #fed7aa; border-radius: var(--radius-sm);">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem;">
+                <div id="bulkConfirmMessage" style="font-size: 0.88rem; font-weight: 600; color: #9a3412;"></div>
+                <div style="display: flex; gap: 0.5rem;">
+                  <button type="button" id="btnBulkConfirmYes" class="btn btn-primary btn-sm" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">
+                    Confirm
+                  </button>
+                  <button type="button" id="btnBulkConfirmCancel" class="btn btn-outline btn-sm" style="padding: 0.25rem 0.65rem; font-size: 0.8rem;">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="owner-catalog-table">
+              <thead>
+                <tr>
+                  <th style="width: 60px;">Photo</th>
+                  <th>Item Name</th>
+                  <th>Category</th>
+                  <th>Price &amp; Adjust</th>
+                  <th>Discount</th>
+                  <th>Status</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ownerCatalogTableBody">
+                <tr>
+                  <td colspan="7" style="text-align: center; padding: 2rem; color: var(--color-text-muted);">
+                    Loading catalog from Firestore...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-bottom" style="border: none; padding-top: 0;">
+        <div>&copy; 2026 CafeLive Hyderabad • Internal Kitchen &amp; Owner Management System</div>
+        <div><a href="index.html" style="color: #ab9b90; text-decoration: none;">&larr; Switch to Customer View</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import {
+      loginWithEmail,
+      loginWithGoogle,
+      logoutUser,
+      subscribeToAuthState,
+      setupHeaderAuthPill
+    } from "./js/auth.js?v=20261113b";
+    import {
+      checkIfOwner,
+      updateOrderStatus,
+      subscribeToActiveOrders,
+      subscribeToOrderHistory
+    } from "./js/owner.js?v=20261113b";
+    import { formatOrderDate } from "./js/orders.js?v=20261113b";
+    import {
+      formatPrice,
+      resetToHyderabadMenu,
+      subscribeToMenu,
+      addMenuItem,
+      updateMenuItem,
+      updateItemPrice,
+      updateItemDiscount,
+      bulkApplyCategoryDiscount,
+      bulkClearAllDiscounts,
+      getEffectivePrice,
+      formatPriceUpdatedAt,
+      toggleMenuItemAvailability,
+      deleteMenuItem,
+      getLocalFallbackFor,
+      getLocalJpgFor,
+      showToast
+    } from "./js/menu.js?v=20261113b";
+    import { escapeHtml } from "./js/firebase.js?v=20261113b";
+
+    // Setup global header user info
+    setupHeaderAuthPill("authPill");
+
+    // Staff Login Elements
+    const staffLoginCard = document.getElementById("staffLoginCard");
+    const staffLoginForm = document.getElementById("staffLoginForm");
+    const staffEmail = document.getElementById("staffEmail");
+    const staffPassword = document.getElementById("staffPassword");
+    const staffLoginBtn = document.getElementById("staffLoginBtn");
+    const staffGoogleLoginBtn = document.getElementById("staffGoogleLoginBtn");
+    const staffLoginAlert = document.getElementById("staffLoginAlert");
+
+    // Non-Staff Access Card Elements
+    const notStaffCard = document.getElementById("notStaffCard");
+    const loggedCustomerEmail = document.getElementById("loggedCustomerEmail");
+    const switchStaffBtn = document.getElementById("switchStaffBtn");
+
+    // Board Elements
+    const boardContainer = document.getElementById("boardContainer");
+    const ownerErrorAlert = document.getElementById("ownerErrorAlert");
+    const totalActiveOrdersBadge = document.getElementById("totalActiveOrdersBadge");
+    const tabOrderCountBadge = document.getElementById("tabOrderCountBadge");
+    const ownerSyncMenuBtn = document.getElementById("ownerSyncMenuBtn");
+    const quickReloadBtn = document.getElementById("quickReloadBtn");
+
+    // Tab Navigation Elements
+    const tabOrdersViewBtn = document.getElementById("tabOrdersViewBtn");
+    const tabHistoryViewBtn = document.getElementById("tabHistoryViewBtn");
+    const tabAddMenuViewBtn = document.getElementById("tabAddMenuViewBtn");
+    const ordersViewSection = document.getElementById("ordersViewSection");
+    const historyViewSection = document.getElementById("historyViewSection");
+    const addMenuViewSection = document.getElementById("addMenuViewSection");
+
+    // Kanban Cards & Counters
+    const cardsReceived = document.getElementById("cardsReceived");
+    const cardsPreparing = document.getElementById("cardsPreparing");
+    const cardsReady = document.getElementById("cardsReady");
+    const countReceived = document.getElementById("countReceived");
+    const countPreparing = document.getElementById("countPreparing");
+    const countReady = document.getElementById("countReady");
+
+    // Add Menu Form Elements
+    const addMenuItemForm = document.getElementById("addMenuItemForm");
+    const newItemName = document.getElementById("newItemName");
+    const newItemCategory = document.getElementById("newItemCategory");
+    const newItemPrice = document.getElementById("newItemPrice");
+    const newItemImage = document.getElementById("newItemImage");
+    const newItemAvailable = document.getElementById("newItemAvailable");
+    const addMenuItemBtn = document.getElementById("addMenuItemBtn");
+    const resetItemFormBtn = document.getElementById("resetItemFormBtn");
+    const addMenuAlert = document.getElementById("addMenuAlert");
+    const previewCardTarget = document.getElementById("previewCardTarget");
+    const catalogItemCount = document.getElementById("catalogItemCount");
+    const ownerCatalogTableBody = document.getElementById("ownerCatalogTableBody");
+
+    let activeUser = null;
+    let unsubscribeAllOrders = null;
+    let unsubscribeCatalogMenu = null;
+    let currentCatalogItems = [];
+
+    let unsubscribeHistoryOrders = null;
+
+    // -------------------------------------------------------------
+    // TAB SWITCHING (Orders Queue vs History vs Add Menu)
+    // -------------------------------------------------------------
+    function switchOwnerTab(tabName) {
+      if (tabOrdersViewBtn) tabOrdersViewBtn.classList.remove("active");
+      if (tabHistoryViewBtn) tabHistoryViewBtn.classList.remove("active");
+      if (tabAddMenuViewBtn) tabAddMenuViewBtn.classList.remove("active");
+
+      if (ordersViewSection) ordersViewSection.style.display = "none";
+      if (historyViewSection) historyViewSection.style.display = "none";
+      if (addMenuViewSection) addMenuViewSection.style.display = "none";
+
+      if (tabName === "orders") {
+        if (tabOrdersViewBtn) tabOrdersViewBtn.classList.add("active");
+        if (ordersViewSection) ordersViewSection.style.display = "block";
+      } else if (tabName === "history") {
+        if (tabHistoryViewBtn) tabHistoryViewBtn.classList.add("active");
+        if (historyViewSection) historyViewSection.style.display = "block";
+      } else if (tabName === "addMenu") {
+        if (tabAddMenuViewBtn) tabAddMenuViewBtn.classList.add("active");
+        if (addMenuViewSection) addMenuViewSection.style.display = "block";
+        updateLivePreview();
+      }
+    }
+
+    if (tabOrdersViewBtn) {
+      tabOrdersViewBtn.addEventListener("click", () => switchOwnerTab("orders"));
+    }
+    if (tabHistoryViewBtn) {
+      tabHistoryViewBtn.addEventListener("click", () => switchOwnerTab("history"));
+    }
+    if (tabAddMenuViewBtn) {
+      tabAddMenuViewBtn.addEventListener("click", () => switchOwnerTab("addMenu"));
+    }
+
+    // -------------------------------------------------------------
+    // LIVE CUSTOMER CARD PREVIEW
+    // -------------------------------------------------------------
+    function updateLivePreview() {
+      if (!previewCardTarget) return;
+
+      const name = newItemName.value.trim() || "Item Preview Name";
+      const cat = newItemCategory.value || "Beverages";
+      const priceNum = Number(newItemPrice.value) || 0;
+      const isAvailable = newItemAvailable.checked;
+      let imgSrc = newItemImage.value.trim();
+
+      if (!imgSrc || imgSrc.endsWith(".svg")) {
+        imgSrc = getLocalJpgFor({ name, category: cat });
+      }
+
+      const svgFallback = getLocalFallbackFor({ name, category: cat });
+      previewCardTarget.innerHTML = `
+        <article class="menu-item-card ${isAvailable ? '' : 'is-unavailable'}" style="box-shadow: var(--shadow-md);">
+          <div class="menu-item-image-wrap">
+            <img
+              src="${escapeHtml(imgSrc)}"
+              alt="${escapeHtml(name)}"
+              class="menu-item-image"
+              loading="lazy"
+              onerror="if (this.src !== '${escapeHtml(svgFallback)}' && !this.src.endsWith('${escapeHtml(svgFallback)}')) { this.src = '${escapeHtml(svgFallback)}'; } else { this.onerror=null; this.src='images/placeholder.svg'; }"
+            >
+          </div>
+          <div class="menu-item-body">
+            <div class="menu-item-top">
+              <h4 class="menu-item-title" style="font-size: 1.05rem;">${escapeHtml(name)}</h4>
+              <span class="${isAvailable ? 'badge-category' : 'badge-soldout'}">
+                ${isAvailable ? escapeHtml(cat) : 'Sold Out'}
+              </span>
+            </div>
+            <div class="menu-item-bottom">
+              <span class="menu-item-price">${formatPrice(priceNum)}</span>
+              <button type="button" class="btn btn-secondary btn-sm" disabled style="opacity: 0.85;">
+                ${isAvailable ? '+ Add to Cart' : 'Unavailable'}
+              </button>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    // Listen to form inputs for live preview
+    [newItemName, newItemCategory, newItemPrice, newItemImage].forEach((el) => {
+      if (el) el.addEventListener("input", updateLivePreview);
+    });
+    if (newItemAvailable) {
+      newItemAvailable.addEventListener("change", updateLivePreview);
+    }
+
+    // 1-Click Preset Buttons Handler (No hardcoded prices, removes old item name)
+    document.querySelectorAll(".preset-pill-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        // Do NOT prefill or overwrite with old item name
+        newItemCategory.value = btn.dataset.cat || "Beverages";
+        newItemImage.value = btn.dataset.img || "";
+
+        // Load price from live catalog if item matches, otherwise clear price
+        const presetClean = (btn.textContent || "").replace(/[^a-zA-Z]/g, "").toLowerCase();
+        const liveMatch = (currentCatalogItems || []).find((it) =>
+          it.name && it.name.toLowerCase().replace(/[^a-zA-Z]/g, "").includes(presetClean)
+        );
+        if (liveMatch && liveMatch.price) {
+          newItemPrice.value = liveMatch.price;
+        } else {
+          newItemPrice.value = "";
+        }
+
+        newItemAvailable.checked = true;
+        updateLivePreview();
+        newItemName.focus();
+      });
+    });
+
+    // Reset Form Button
+    if (resetItemFormBtn) {
+      resetItemFormBtn.addEventListener("click", () => {
+        addMenuItemForm.reset();
+        newItemAvailable.checked = true;
+        addMenuAlert.style.display = "none";
+        updateLivePreview();
+      });
+    }
+
+    // Submit Add Menu Form
+    if (addMenuItemForm) {
+      addMenuItemForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        addMenuAlert.style.display = "none";
+
+        const name = newItemName.value.trim();
+        const price = Number(newItemPrice.value);
+        const category = newItemCategory.value;
+        const image = newItemImage.value.trim() || getLocalFallbackFor({ name, category });
+        const available = newItemAvailable.checked;
+
+        if (!name) {
+          addMenuAlert.className = "alert alert-error";
+          addMenuAlert.textContent = "Please enter an item name.";
+          addMenuAlert.style.display = "block";
+          newItemName.focus();
+          return;
+        }
+
+        if (isNaN(price) || price <= 0) {
+          addMenuAlert.className = "alert alert-error";
+          addMenuAlert.textContent = "Please enter a valid price in INR (greater than ₹0).";
+          addMenuAlert.style.display = "block";
+          newItemPrice.focus();
+          return;
+        }
+
+        addMenuItemBtn.disabled = true;
+        addMenuItemBtn.innerHTML = `<span class="spinner spinner-sm"></span> Publishing to Menu...`;
+
+        const res = await addMenuItem({ name, price, category, image, available });
+
+        addMenuItemBtn.disabled = false;
+        addMenuItemBtn.innerHTML = `Publish Item to Menu 🚀`;
+
+        if (!res.success) {
+          addMenuAlert.className = "alert alert-error";
+          addMenuAlert.textContent = "Failed to add item: " + res.error;
+          addMenuAlert.style.display = "block";
+        } else {
+          addMenuAlert.className = "alert alert-success";
+          addMenuAlert.textContent = `✅ "${name}" has been published to the menu in ₹${Math.round(price)}! Customers can now view and order it.`;
+          addMenuAlert.style.display = "block";
+          addMenuItemForm.reset();
+          newItemAvailable.checked = true;
+          updateLivePreview();
+        }
+      });
+    }
+
+    // -------------------------------------------------------------
+    // CURRENT CATALOG TABLE RENDERING (Manage in-stock & delete)
+    // -------------------------------------------------------------
+    function renderOwnerCatalog(items) {
+      currentCatalogItems = items;
+      if (catalogItemCount) {
+        catalogItemCount.textContent = items.length;
+      }
+      if (!ownerCatalogTableBody) return;
+
+      if (items.length === 0) {
+        ownerCatalogTableBody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 2rem; color: var(--color-text-muted);">
+              No items currently in menu catalog. Use the form above or click "Reload 16 Authentic Items".
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      ownerCatalogTableBody.innerHTML = "";
+
+      items.forEach((item) => {
+        const tr = document.createElement("tr");
+
+        // Photo Thumbnail
+        const tdImg = document.createElement("td");
+        const img = document.createElement("img");
+        img.className = "owner-catalog-thumb";
+        let catalogImgSrc = item.image;
+        if (!catalogImgSrc || catalogImgSrc.endsWith(".svg")) {
+          catalogImgSrc = getLocalJpgFor(item);
+        }
+        img.src = catalogImgSrc;
+        img.alt = item.name;
+        img.loading = "lazy";
+        const svgFallback = getLocalFallbackFor(item);
+        img.onerror = () => {
+          if (img.src !== svgFallback && !img.src.endsWith(svgFallback)) {
+            img.onerror = () => {
+              img.onerror = null;
+              img.src = "images/placeholder.svg";
+            };
+            img.src = svgFallback;
+          } else {
+            img.onerror = null;
+            img.src = "images/placeholder.svg";
+          }
+        };
+        tdImg.appendChild(img);
+        tr.appendChild(tdImg);
+
+        // Name
+        const tdName = document.createElement("td");
+        tdName.style.fontWeight = "700";
+        tdName.textContent = item.name;
+        tr.appendChild(tdName);
+
+        // Category
+        const tdCat = document.createElement("td");
+        const catBadge = document.createElement("span");
+        catBadge.className = "badge-category";
+        catBadge.textContent = item.category || "Beverages";
+        tdCat.appendChild(catBadge);
+        tr.appendChild(tdCat);
+
+        // Price & Quick Adjust (Col 4)
+        const tdPrice = document.createElement("td");
+        tdPrice.className = "catalog-price-col";
+
+        const priceTop = document.createElement("div");
+        priceTop.style.display = "flex";
+        priceTop.style.alignItems = "baseline";
+        priceTop.style.gap = "0.4rem";
+
+        const origPriceSpan = document.createElement("span");
+        origPriceSpan.style.fontWeight = "800";
+        origPriceSpan.style.color = "var(--color-primary)";
+        origPriceSpan.style.fontSize = "1.05rem";
+        origPriceSpan.textContent = formatPrice(item.price);
+        priceTop.appendChild(origPriceSpan);
+        tdPrice.appendChild(priceTop);
+
+        // Quick buttons: -₹5, exact input, +₹5, Set
+        const quickAdjustWrap = document.createElement("div");
+        quickAdjustWrap.style.display = "flex";
+        quickAdjustWrap.style.alignItems = "center";
+        quickAdjustWrap.style.gap = "0.25rem";
+        quickAdjustWrap.style.marginTop = "0.35rem";
+
+        const minusBtn = document.createElement("button");
+        minusBtn.type = "button";
+        minusBtn.className = "btn btn-outline btn-xs";
+        minusBtn.textContent = "−₹5";
+        minusBtn.title = "Decrease price by ₹5";
+        minusBtn.addEventListener("click", async () => {
+          minusBtn.disabled = true;
+          const newPrice = Math.max(1, item.price - 5);
+          const res = await updateItemPrice(item.id, newPrice);
+          if (!res.success) {
+            showToast("Failed to adjust price: " + res.error, "⚠️");
+            minusBtn.disabled = false;
+          } else {
+            showToast(`Price for "${item.name}" set to ${formatPrice(newPrice)}`, "✅");
+          }
+        });
+
+        const priceInput = document.createElement("input");
+        priceInput.type = "number";
+        priceInput.min = "1";
+        priceInput.step = "1";
+        priceInput.value = item.price;
+        priceInput.className = "form-input";
+        priceInput.style.width = "54px";
+        priceInput.style.padding = "0.15rem 0.3rem";
+        priceInput.style.fontSize = "0.8rem";
+        priceInput.style.textAlign = "center";
+        priceInput.setAttribute("aria-label", `Exact price for ${item.name}`);
+
+        const plusBtn = document.createElement("button");
+        plusBtn.type = "button";
+        plusBtn.className = "btn btn-outline btn-xs";
+        plusBtn.textContent = "+₹5";
+        plusBtn.title = "Increase price by ₹5";
+        plusBtn.addEventListener("click", async () => {
+          plusBtn.disabled = true;
+          const newPrice = item.price + 5;
+          const res = await updateItemPrice(item.id, newPrice);
+          if (!res.success) {
+            showToast("Failed to adjust price: " + res.error, "⚠️");
+            plusBtn.disabled = false;
+          } else {
+            showToast(`Price for "${item.name}" set to ${formatPrice(newPrice)}`, "✅");
+          }
+        });
+
+        const setBtn = document.createElement("button");
+        setBtn.type = "button";
+        setBtn.className = "btn btn-primary btn-xs";
+        setBtn.textContent = "Set";
+        setBtn.title = "Set exact price";
+        setBtn.addEventListener("click", async () => {
+          const val = Number(priceInput.value);
+          if (isNaN(val) || val <= 0) {
+            showToast("Price must be a number > 0", "⚠️");
+            priceInput.focus();
+            return;
+          }
+          setBtn.disabled = true;
+          const res = await updateItemPrice(item.id, val);
+          if (!res.success) {
+            showToast("Failed to set price: " + res.error, "⚠️");
+            setBtn.disabled = false;
+          } else {
+            showToast(`Updated price for "${item.name}" to ${formatPrice(val)}`, "✅");
+          }
+        });
+
+        quickAdjustWrap.appendChild(minusBtn);
+        quickAdjustWrap.appendChild(priceInput);
+        quickAdjustWrap.appendChild(plusBtn);
+        quickAdjustWrap.appendChild(setBtn);
+        tdPrice.appendChild(quickAdjustWrap);
+
+        // Price history note: last changed time
+        const historyNote = document.createElement("div");
+        historyNote.className = "price-history-note";
+        historyNote.style.fontSize = "0.72rem";
+        historyNote.style.color = "var(--color-text-muted)";
+        historyNote.style.marginTop = "0.3rem";
+        historyNote.textContent = `🕒 Last changed: ${formatPriceUpdatedAt(item.priceUpdatedAt)}`;
+        tdPrice.appendChild(historyNote);
+
+        tr.appendChild(tdPrice);
+
+        // Discount Column (Col 5)
+        const tdDiscount = document.createElement("td");
+        tdDiscount.className = "catalog-discount-col";
+
+        const effPrice = getEffectivePrice(item);
+        const hasDiscount = Number(item.discountPercent) > 0;
+
+        const discountHeader = document.createElement("div");
+        discountHeader.style.marginBottom = "0.3rem";
+        if (hasDiscount) {
+          discountHeader.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;">
+              <span class="badge-discount">${item.discountPercent}% OFF</span>
+              <span style="font-size: 0.8rem; font-weight: 700; color: #15803d;">Now ${formatPrice(effPrice)}</span>
+            </div>
+          `;
+        } else {
+          discountHeader.innerHTML = `<span style="font-size: 0.8rem; color: var(--color-text-muted);">No discount</span>`;
+        }
+        tdDiscount.appendChild(discountHeader);
+
+        const discountControls = document.createElement("div");
+        discountControls.style.display = "flex";
+        discountControls.style.alignItems = "center";
+        discountControls.style.gap = "0.25rem";
+
+        const discountInput = document.createElement("input");
+        discountInput.type = "number";
+        discountInput.min = "0";
+        discountInput.max = "90";
+        discountInput.step = "1";
+        discountInput.value = hasDiscount ? item.discountPercent : "";
+        discountInput.placeholder = "0-90%";
+        discountInput.className = "form-input";
+        discountInput.style.width = "58px";
+        discountInput.style.padding = "0.15rem 0.3rem";
+        discountInput.style.fontSize = "0.8rem";
+        discountInput.style.textAlign = "center";
+        discountInput.setAttribute("aria-label", `Discount percent for ${item.name}`);
+
+        const saveDiscountBtn = document.createElement("button");
+        saveDiscountBtn.type = "button";
+        saveDiscountBtn.className = "btn btn-outline btn-xs";
+        saveDiscountBtn.textContent = "Save";
+        saveDiscountBtn.title = "Save discount percent";
+        saveDiscountBtn.addEventListener("click", async () => {
+          const val = Number(discountInput.value);
+          if (isNaN(val) || val < 0 || val > 90) {
+            showToast("Discount must be a percent from 0 to 90.", "⚠️");
+            discountInput.focus();
+            return;
+          }
+          saveDiscountBtn.disabled = true;
+          const res = await updateItemDiscount(item.id, val);
+          if (!res.success) {
+            showToast("Failed to save discount: " + res.error, "⚠️");
+            saveDiscountBtn.disabled = false;
+          } else {
+            showToast(val > 0 ? `Set ${val}% discount for "${item.name}"` : `Turned off discount for "${item.name}"`, "✅");
+          }
+        });
+
+        discountControls.appendChild(discountInput);
+        discountControls.appendChild(saveDiscountBtn);
+
+        if (hasDiscount) {
+          const offDiscountBtn = document.createElement("button");
+          offDiscountBtn.type = "button";
+          offDiscountBtn.className = "btn btn-outline btn-xs";
+          offDiscountBtn.style.color = "#dc2626";
+          offDiscountBtn.style.borderColor = "#fca5a5";
+          offDiscountBtn.textContent = "Off";
+          offDiscountBtn.title = "Turn off discount";
+          offDiscountBtn.addEventListener("click", async () => {
+            offDiscountBtn.disabled = true;
+            const res = await updateItemDiscount(item.id, 0);
+            if (!res.success) {
+              showToast("Failed to turn off discount: " + res.error, "⚠️");
+              offDiscountBtn.disabled = false;
+            } else {
+              showToast(`Turned off discount for "${item.name}"`, "✅");
+            }
+          });
+          discountControls.appendChild(offDiscountBtn);
+        }
+
+        tdDiscount.appendChild(discountControls);
+        tr.appendChild(tdDiscount);
+
+        // Status Badge (Col 6)
+        const tdStatus = document.createElement("td");
+        const statusBadge = document.createElement("span");
+        if (item.available) {
+          statusBadge.className = "badge badge-ready";
+          statusBadge.textContent = "In Stock";
+        } else {
+          statusBadge.className = "badge badge-soldout";
+          statusBadge.textContent = "Sold Out";
+        }
+        tdStatus.appendChild(statusBadge);
+        tr.appendChild(tdStatus);
+
+        // Actions: Edit + Toggle Availability + Delete (Col 7)
+        const tdActions = document.createElement("td");
+        tdActions.style.textAlign = "right";
+
+        const actionWrap = document.createElement("div");
+        actionWrap.style.display = "inline-flex";
+        actionWrap.style.gap = "0.35rem";
+        actionWrap.style.flexWrap = "wrap";
+        actionWrap.style.justifyContent = "flex-end";
+
+        // Edit Button (Requirement 1: Inline Form, No Popup)
+        const editBtn = document.createElement("button");
+        editBtn.type = "button";
+        editBtn.className = "btn btn-outline btn-sm";
+        editBtn.style.padding = "0.25rem 0.55rem";
+        editBtn.style.fontSize = "0.8rem";
+        editBtn.innerHTML = `<svg class="icon-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg> Edit`;
+        editBtn.title = "Edit item details inline";
+        editBtn.addEventListener("click", () => {
+          const originalCells = Array.from(tr.childNodes);
+          tr.innerHTML = `
+            <td colspan="7" style="padding: 1rem; background: #fffdf9; border: 2px solid var(--color-saffron); border-radius: var(--radius-md);">
+              <form class="inline-catalog-edit-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; align-items: flex-end;">
+                <div>
+                  <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 0.2rem; color: var(--color-primary);">Item Name *</label>
+                  <input type="text" class="form-input edit-name" value="${escapeHtml(item.name)}" style="padding: 0.4rem 0.6rem; font-size: 0.85rem;" required>
+                </div>
+                <div>
+                  <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 0.2rem; color: var(--color-primary);">Price in INR (₹) *</label>
+                  <input type="number" class="form-input edit-price" value="${item.price}" min="1" step="1" style="padding: 0.4rem 0.6rem; font-size: 0.85rem;" required>
+                </div>
+                <div>
+                  <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 0.2rem; color: var(--color-primary);">Category</label>
+                  <select class="form-input edit-cat" style="padding: 0.4rem 0.6rem; font-size: 0.85rem;">
+                    <option value="Beverages" ${item.category === "Beverages" ? "selected" : ""}>Beverages</option>
+                    <option value="Bakery" ${item.category === "Bakery" ? "selected" : ""}>Bakery</option>
+                    <option value="Snacks" ${item.category === "Snacks" ? "selected" : ""}>Snacks</option>
+                    <option value="Food" ${item.category === "Food" ? "selected" : ""}>Food</option>
+                    <option value="Dessert" ${item.category === "Dessert" ? "selected" : ""}>Dessert</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 0.2rem; color: var(--color-primary);">Discount % (0-90)</label>
+                  <input type="number" class="form-input edit-discount" value="${item.discountPercent || 0}" min="0" max="90" step="1" style="padding: 0.4rem 0.6rem; font-size: 0.85rem;">
+                </div>
+                <div style="grid-column: span 2;">
+                  <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 0.2rem; color: var(--color-primary);">Image URL / Path</label>
+                  <input type="text" class="form-input edit-image" value="${escapeHtml(item.image || "")}" style="padding: 0.4rem 0.6rem; font-size: 0.85rem;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; padding-bottom: 0.5rem;">
+                  <input type="checkbox" class="edit-avail" id="avail_${item.id}" ${item.available ? "checked" : ""} style="width: 18px; height: 18px; accent-color: var(--color-saffron); cursor: pointer;">
+                  <label for="avail_${item.id}" style="font-size: 0.85rem; font-weight: 600; cursor: pointer;">Available &amp; In-Stock</label>
+                </div>
+                <div style="display: flex; gap: 0.5rem; justify-content: flex-end; grid-column: 1 / -1; margin-top: 0.35rem;">
+                  <button type="submit" class="btn btn-primary btn-sm btn-save-edit" style="padding: 0.35rem 0.9rem;">
+                    Save Updates
+                  </button>
+                  <button type="button" class="btn btn-outline btn-sm btn-cancel-edit" style="padding: 0.35rem 0.75rem;">
+                    Cancel
+                  </button>
+                </div>
+                <div class="edit-error" style="grid-column: 1 / -1; color: #dc2626; font-size: 0.82rem; font-weight: 600; display: none;"></div>
+              </form>
+            </td>
+          `;
+
+          const editForm = tr.querySelector(".inline-catalog-edit-form");
+          const cancelBtn = tr.querySelector(".btn-cancel-edit");
+          const saveBtn = tr.querySelector(".btn-save-edit");
+          const errDiv = tr.querySelector(".edit-error");
+
+          cancelBtn.addEventListener("click", () => {
+            tr.innerHTML = "";
+            originalCells.forEach((c) => tr.appendChild(c));
+          });
+
+          editForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            errDiv.style.display = "none";
+            const newName = tr.querySelector(".edit-name").value.trim();
+            const newPrice = Number(tr.querySelector(".edit-price").value);
+            const newCat = tr.querySelector(".edit-cat").value;
+            const newDiscount = Number(tr.querySelector(".edit-discount").value) || 0;
+            const newImg = tr.querySelector(".edit-image").value.trim();
+            const newAvail = tr.querySelector(".edit-avail").checked;
+
+            if (!newName) {
+              errDiv.textContent = "Item name cannot be empty.";
+              errDiv.style.display = "block";
+              return;
+            }
+            if (isNaN(newPrice) || newPrice <= 0) {
+              errDiv.textContent = "Price must be a valid number greater than 0.";
+              errDiv.style.display = "block";
+              return;
+            }
+            if (isNaN(newDiscount) || newDiscount < 0 || newDiscount > 90) {
+              errDiv.textContent = "Discount must be between 0% and 90%.";
+              errDiv.style.display = "block";
+              return;
+            }
+
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = `<span class="spinner spinner-sm"></span> Saving...`;
+
+            const res = await updateMenuItem(item.id, {
+              name: newName,
+              price: newPrice,
+              category: newCat,
+              discountPercent: newDiscount,
+              image: newImg,
+              available: newAvail
+            });
+
+            if (!res.success) {
+              saveBtn.disabled = false;
+              saveBtn.textContent = "Save Updates";
+              errDiv.textContent = "Failed to update item: " + res.error;
+              errDiv.style.display = "block";
+            } else {
+              showToast(`Updated "${newName}"!`, "✅");
+            }
+          });
+        });
+        actionWrap.appendChild(editBtn);
+
+        // Toggle Button
+        const toggleBtn = document.createElement("button");
+        toggleBtn.type = "button";
+        toggleBtn.className = "btn btn-outline btn-sm";
+        toggleBtn.style.padding = "0.25rem 0.65rem";
+        toggleBtn.style.fontSize = "0.8rem";
+        toggleBtn.textContent = item.available ? "Mark Sold Out" : "Mark Available";
+        toggleBtn.addEventListener("click", async () => {
+          toggleBtn.disabled = true;
+          toggleBtn.textContent = "Updating...";
+          const res = await toggleMenuItemAvailability(item.id, item.available);
+          if (!res.success) {
+            showToast("Error updating availability: " + res.error, "⚠️");
+            toggleBtn.disabled = false;
+            toggleBtn.textContent = item.available ? "Mark Sold Out" : "Mark Available";
+          } else {
+            showToast(`"${item.name}" availability updated`, "✅");
+          }
+        });
+        actionWrap.appendChild(toggleBtn);
+
+        // Delete Button with Inline Confirm (No popups)
+        const delBtn = document.createElement("button");
+        delBtn.type = "button";
+        delBtn.className = "btn btn-outline btn-sm";
+        delBtn.style.padding = "0.25rem 0.5rem";
+        delBtn.style.fontSize = "0.8rem";
+        delBtn.style.color = "#dc2626";
+        delBtn.style.borderColor = "#fca5a5";
+        delBtn.innerHTML = `<svg class="icon-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
+        delBtn.title = "Delete Item Permanently";
+        delBtn.addEventListener("click", () => {
+          const originalNodes = Array.from(actionWrap.childNodes);
+          actionWrap.innerHTML = `
+            <div style="display: inline-flex; align-items: center; gap: 0.3rem; background: #fff5f5; border: 1px solid #fed7d7; padding: 0.2rem 0.4rem; border-radius: var(--radius-sm);">
+              <span style="font-size: 0.75rem; color: #b91c1c; font-weight: 600;">Delete?</span>
+              <button type="button" class="btn btn-sm btn-del-confirm" style="background: #dc2626; color: white; padding: 0.15rem 0.45rem; font-size: 0.75rem; border: none; border-radius: 4px; cursor: pointer;">Yes</button>
+              <button type="button" class="btn btn-sm btn-del-cancel" style="background: #e5e7eb; color: #374151; padding: 0.15rem 0.45rem; font-size: 0.75rem; border: none; border-radius: 4px; cursor: pointer;">No</button>
+            </div>
+          `;
+          actionWrap.querySelector(".btn-del-cancel").addEventListener("click", () => {
+            actionWrap.innerHTML = "";
+            originalNodes.forEach((node) => actionWrap.appendChild(node));
+          });
+          actionWrap.querySelector(".btn-del-confirm").addEventListener("click", async () => {
+            actionWrap.innerHTML = `<span class="spinner spinner-sm"></span>`;
+            const res = await deleteMenuItem(item.id);
+            if (!res.success) {
+              showToast("Delete failed: " + res.error, "⚠️");
+              actionWrap.innerHTML = "";
+              originalNodes.forEach((node) => actionWrap.appendChild(node));
+            } else {
+              showToast(`Deleted "${item.name}"`, "🗑️");
+            }
+          });
+        });
+        actionWrap.appendChild(delBtn);
+
+        tdActions.appendChild(actionWrap);
+        tr.appendChild(tdActions);
+
+        ownerCatalogTableBody.appendChild(tr);
+      });
+    }
+
+    // -------------------------------------------------------------
+    // BULK ACTIONS (Apply Category Discount & Clear All Discounts)
+    // -------------------------------------------------------------
+    const bulkCategorySelect = document.getElementById("bulkCategorySelect");
+    const bulkDiscountInput = document.getElementById("bulkDiscountInput");
+    const btnBulkApplyCategory = document.getElementById("btnBulkApplyCategory");
+    const btnBulkClearAll = document.getElementById("btnBulkClearAll");
+    const bulkConfirmBox = document.getElementById("bulkConfirmBox");
+    const bulkConfirmMessage = document.getElementById("bulkConfirmMessage");
+    const btnBulkConfirmYes = document.getElementById("btnBulkConfirmYes");
+    const btnBulkConfirmCancel = document.getElementById("btnBulkConfirmCancel");
+
+    let pendingBulkAction = null;
+
+    if (btnBulkApplyCategory) {
+      btnBulkApplyCategory.addEventListener("click", () => {
+        const cat = bulkCategorySelect ? bulkCategorySelect.value : "All";
+        const pct = bulkDiscountInput ? Number(bulkDiscountInput.value) : 10;
+        if (isNaN(pct) || pct < 1 || pct > 90) {
+          showToast("Please enter a discount percent between 1 and 90.", "⚠️");
+          if (bulkDiscountInput) bulkDiscountInput.focus();
+          return;
+        }
+
+        const targets = currentCatalogItems.filter((it) => cat === "All" || it.category === cat);
+        const count = targets.length;
+        if (count === 0) {
+          showToast(`No items found in "${cat}".`, "ℹ️");
+          return;
+        }
+
+        if (bulkConfirmMessage) {
+          bulkConfirmMessage.textContent = `Apply ${pct}% discount to ${count} item${count === 1 ? "" : "s"} in ${cat}?`;
+        }
+        if (bulkConfirmBox) bulkConfirmBox.style.display = "block";
+
+        pendingBulkAction = async () => {
+          if (btnBulkConfirmYes) {
+            btnBulkConfirmYes.disabled = true;
+            btnBulkConfirmYes.innerHTML = `<span class="spinner spinner-sm"></span> Applying...`;
+          }
+          const res = await bulkApplyCategoryDiscount(currentCatalogItems, cat, pct);
+          if (btnBulkConfirmYes) {
+            btnBulkConfirmYes.disabled = false;
+            btnBulkConfirmYes.textContent = "Confirm";
+          }
+          if (bulkConfirmBox) bulkConfirmBox.style.display = "none";
+          if (!res.success) {
+            showToast("Bulk discount failed: " + res.error, "⚠️");
+          } else {
+            showToast(`Applied ${pct}% discount to ${res.count} items!`, "🎉");
+          }
+        };
+      });
+    }
+
+    if (btnBulkClearAll) {
+      btnBulkClearAll.addEventListener("click", () => {
+        const targets = currentCatalogItems.filter((it) => Number(it.discountPercent) > 0);
+        const count = targets.length;
+        if (count === 0) {
+          showToast("No items currently have discounts.", "ℹ️");
+          return;
+        }
+
+        if (bulkConfirmMessage) {
+          bulkConfirmMessage.textContent = `Clear discounts on all ${count} discounted item${count === 1 ? "" : "s"}?`;
+        }
+        if (bulkConfirmBox) bulkConfirmBox.style.display = "block";
+
+        pendingBulkAction = async () => {
+          if (btnBulkConfirmYes) {
+            btnBulkConfirmYes.disabled = true;
+            btnBulkConfirmYes.innerHTML = `<span class="spinner spinner-sm"></span> Clearing...`;
+          }
+          const res = await bulkClearAllDiscounts(currentCatalogItems);
+          if (btnBulkConfirmYes) {
+            btnBulkConfirmYes.disabled = false;
+            btnBulkConfirmYes.textContent = "Confirm";
+          }
+          if (bulkConfirmBox) bulkConfirmBox.style.display = "none";
+          if (!res.success) {
+            showToast("Clear discounts failed: " + res.error, "⚠️");
+          } else {
+            showToast(`Cleared discounts on ${res.count} items!`, "✅");
+          }
+        };
+      });
+    }
+
+    if (btnBulkConfirmCancel) {
+      btnBulkConfirmCancel.addEventListener("click", () => {
+        if (bulkConfirmBox) bulkConfirmBox.style.display = "none";
+        pendingBulkAction = null;
+      });
+    }
+
+    if (btnBulkConfirmYes) {
+      btnBulkConfirmYes.addEventListener("click", async () => {
+        if (pendingBulkAction) {
+          await pendingBulkAction();
+          pendingBulkAction = null;
+        }
+      });
+    }
+
+    // -------------------------------------------------------------
+    // STAFF LOGIN / LOGOUT
+    // -------------------------------------------------------------
+    if (staffLoginForm) {
+      staffLoginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        staffLoginAlert.style.display = "none";
+        const email = staffEmail.value.trim();
+        const pwd = staffPassword.value;
+
+        if (!email || !pwd) {
+          staffLoginAlert.textContent = "Please enter staff email and password.";
+          staffLoginAlert.style.display = "block";
+          return;
+        }
+
+        staffLoginBtn.disabled = true;
+        staffLoginBtn.innerHTML = `<span class="spinner spinner-sm"></span> Signing In...`;
+
+        const res = await loginWithEmail(email, pwd);
+        staffLoginBtn.disabled = false;
+        staffLoginBtn.textContent = "Sign In to Kitchen Board";
+
+        if (!res.success) {
+          staffLoginAlert.textContent = res.error;
+          staffLoginAlert.style.display = "block";
+        }
+      });
+    }
+
+    // Google Sign-In for Staff
+    if (staffGoogleLoginBtn) {
+      staffGoogleLoginBtn.addEventListener("click", async () => {
+        staffLoginAlert.style.display = "none";
+        staffGoogleLoginBtn.disabled = true;
+        const originalText = staffGoogleLoginBtn.innerHTML;
+        staffGoogleLoginBtn.innerHTML = `<span class="spinner spinner-sm"></span> Connecting to Google...`;
+
+        const res = await loginWithGoogle();
+        staffGoogleLoginBtn.disabled = false;
+        staffGoogleLoginBtn.innerHTML = originalText;
+
+        if (!res.success) {
+          staffLoginAlert.textContent = res.error;
+          staffLoginAlert.style.display = "block";
+        }
+      });
+    }
+
+    if (switchStaffBtn) {
+      switchStaffBtn.addEventListener("click", async () => {
+        await logoutUser();
+      });
+    }
+
+    // -------------------------------------------------------------
+    // RELOAD 16 HYDERABAD ITEMS (₹) - With Inline Confirm (No popups)
+    // -------------------------------------------------------------
+    function handleReloadHyderabadMenu(btnEl) {
+      const existing = btnEl.parentNode.querySelector(".reload-confirm-box");
+      if (existing) {
+        existing.remove();
+        return;
+      }
+
+      const confirmBox = document.createElement("div");
+      confirmBox.className = "reload-confirm-box";
+      confirmBox.style.cssText = "margin-top: 0.6rem; padding: 0.75rem 1rem; background: #fffbeb; border: 1px solid #fde68a; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; box-shadow: var(--shadow-sm);";
+      confirmBox.innerHTML = `
+        <span style="font-size: 0.85rem; font-weight: 600; color: #92400e;">
+          This will add or update the 16 items by name, never delete. Proceed?
+        </span>
+        <div style="display: flex; gap: 0.4rem;">
+          <button type="button" class="btn btn-primary btn-sm btn-reload-yes" style="padding: 0.3rem 0.75rem; font-size: 0.8rem;">Yes, Reload</button>
+          <button type="button" class="btn btn-outline btn-sm btn-reload-no" style="padding: 0.3rem 0.75rem; font-size: 0.8rem;">Cancel</button>
+        </div>
+      `;
+
+      confirmBox.querySelector(".btn-reload-no").addEventListener("click", () => confirmBox.remove());
+      confirmBox.querySelector(".btn-reload-yes").addEventListener("click", async () => {
+        confirmBox.remove();
+        btnEl.disabled = true;
+        btnEl.innerHTML = `<span class="spinner spinner-sm"></span> Populating Menu...`;
+
+        try {
+          await resetToHyderabadMenu();
+          btnEl.textContent = "✅ Menu Refreshed!";
+          showToast("Hyderabad cafe menu reloaded with INR pricing! ☕", "✅");
+          setTimeout(() => {
+            btnEl.disabled = false;
+            btnEl.textContent = "🔄 Reload 16 Hyderabad Items (₹)";
+          }, 3500);
+        } catch (err) {
+          console.error("Failed to reload menu:", err);
+          showToast("Failed to reload menu catalog: " + err.message, "⚠️");
+          btnEl.disabled = false;
+          btnEl.textContent = "🔄 Try Again";
+        }
+      });
+
+      btnEl.parentNode.insertBefore(confirmBox, btnEl.nextSibling);
+    }
+
+    if (ownerSyncMenuBtn) {
+      ownerSyncMenuBtn.addEventListener("click", () => handleReloadHyderabadMenu(ownerSyncMenuBtn));
+    }
+    if (quickReloadBtn) {
+      quickReloadBtn.addEventListener("click", () => handleReloadHyderabadMenu(quickReloadBtn));
+    }
+
+    // -------------------------------------------------------------
+    // KANBAN CARDS RENDERING (Prominent Nickname Callout)
+    // -------------------------------------------------------------
+    function createKanbanCard(order) {
+      const card = document.createElement("div");
+      card.className = `kanban-card kanban-card-${order.status || "received"}`;
+
+      // Card Header: Order ID & Timestamp
+      const header = document.createElement("div");
+      header.style.display = "flex";
+      header.style.justifyContent = "space-between";
+      header.style.alignItems = "center";
+
+      const orderId = document.createElement("span");
+      orderId.className = "order-id";
+      orderId.textContent = `#${order.id.slice(0, 7)}`;
+
+      const time = document.createElement("span");
+      time.className = "order-timestamp";
+      time.textContent = formatOrderDate(order.createdAt);
+
+      header.appendChild(orderId);
+      header.appendChild(time);
+      card.appendChild(header);
+
+      // Customer Nickname Callout Box (Prominently displayed for Barista callout)
+      const customerCallout = document.createElement("div");
+      customerCallout.className = "order-customer-callout";
+
+      const customerName = order.customerName || (order.userEmail ? order.userEmail.split("@")[0] : "Customer");
+
+      const infoDiv = document.createElement("div");
+      infoDiv.className = "order-customer-info";
+
+      const tagSpan = document.createElement("span");
+      tagSpan.className = "order-callout-tag";
+      tagSpan.textContent = "BARISTA CALLOUT";
+
+      const nameSpan = document.createElement("span");
+      nameSpan.className = "order-customer-name";
+      nameSpan.textContent = `🗣️ ${customerName}`;
+
+      infoDiv.appendChild(tagSpan);
+      infoDiv.appendChild(nameSpan);
+
+      customerCallout.appendChild(infoDiv);
+      card.appendChild(customerCallout);
+
+      // Items Summary List
+      const itemsList = document.createElement("ul");
+      itemsList.style.listStyle = "none";
+      itemsList.style.fontSize = "0.9rem";
+      itemsList.style.margin = "0.35rem 0";
+      itemsList.style.padding = "0.35rem 0";
+      itemsList.style.borderTop = "1px dashed var(--color-border)";
+      itemsList.style.borderBottom = "1px dashed var(--color-border)";
+
+      if (Array.isArray(order.items)) {
+        order.items.forEach((item) => {
+          const li = document.createElement("li");
+          li.style.display = "flex";
+          li.style.justifyContent = "space-between";
+          li.style.padding = "0.2rem 0";
+
+          const itemNameQty = document.createElement("span");
+          itemNameQty.textContent = `${item.qty} × ${item.name}`;
+
+          const itemPrice = document.createElement("span");
+          itemPrice.style.fontWeight = "600";
+          itemPrice.textContent = formatPrice((item.qty || 1) * (item.price || 0));
+
+          li.appendChild(itemNameQty);
+          li.appendChild(itemPrice);
+          itemsList.appendChild(li);
+        });
+      }
+      card.appendChild(itemsList);
+
+      // Card Footer: Total Price & Status Transition Action Buttons
+      const footer = document.createElement("div");
+      footer.style.display = "flex";
+      footer.style.flexDirection = "column";
+      footer.style.gap = "0.5rem";
+      footer.style.marginTop = "0.5rem";
+
+      const footerTop = document.createElement("div");
+      footerTop.style.display = "flex";
+      footerTop.style.justifyContent = "space-between";
+      footerTop.style.alignItems = "center";
+      footerTop.style.gap = "0.5rem";
+
+      const total = document.createElement("strong");
+      total.style.fontSize = "1.05rem";
+      total.style.color = "var(--color-primary)";
+      total.style.fontFamily = "var(--font-heading)";
+      total.textContent = formatPrice(order.total || 0);
+      footerTop.appendChild(total);
+
+      const actionsDiv = document.createElement("div");
+      actionsDiv.style.display = "inline-flex";
+      actionsDiv.style.alignItems = "center";
+      actionsDiv.style.gap = "0.35rem";
+      actionsDiv.style.flexWrap = "wrap";
+      footerTop.appendChild(actionsDiv);
+
+      footer.appendChild(footerTop);
+
+      // Inline Confirmation Box for Cancel (No popups)
+      const inlineCancelWrap = document.createElement("div");
+      inlineCancelWrap.style.display = "none";
+      footer.appendChild(inlineCancelWrap);
+
+      function showInlineCancelConfirm() {
+        actionsDiv.style.display = "none";
+        inlineCancelWrap.style.display = "block";
+        inlineCancelWrap.innerHTML = `
+          <div style="background: #fff1f2; border: 1px solid #fecdd3; border-radius: var(--radius-sm); padding: 0.45rem 0.6rem; display: flex; flex-direction: column; gap: 0.35rem;">
+            <span style="font-size: 0.78rem; font-weight: 600; color: #9f1239;">Cancel this order?</span>
+            <div style="display: flex; gap: 0.35rem;">
+              <button type="button" class="btn btn-sm btn-confirm-cancel-yes" style="background: #e11d48; color: white; border: none; padding: 0.2rem 0.55rem; font-size: 0.75rem; border-radius: 4px; cursor: pointer;">Yes, Cancel</button>
+              <button type="button" class="btn btn-outline btn-sm btn-confirm-cancel-no" style="padding: 0.2rem 0.55rem; font-size: 0.75rem; border-radius: 4px; cursor: pointer;">Keep Order</button>
+            </div>
+          </div>
+        `;
+        inlineCancelWrap.querySelector(".btn-confirm-cancel-no").addEventListener("click", () => {
+          inlineCancelWrap.style.display = "none";
+          actionsDiv.style.display = "inline-flex";
+        });
+        inlineCancelWrap.querySelector(".btn-confirm-cancel-yes").addEventListener("click", async () => {
+          const yesBtn = inlineCancelWrap.querySelector(".btn-confirm-cancel-yes");
+          yesBtn.disabled = true;
+          yesBtn.innerHTML = `<span class="spinner spinner-sm"></span>`;
+          const res = await updateOrderStatus(order.id, "cancelled");
+          if (!res.success) {
+            showToast("Failed to cancel: " + res.error, "⚠️");
+            inlineCancelWrap.style.display = "none";
+            actionsDiv.style.display = "inline-flex";
+          } else {
+            showToast("Order cancelled", "ℹ️");
+          }
+        });
+      }
+
+      // Action buttons based on status
+      if (order.status === "received") {
+        // Start Prep Button
+        const prepBtn = document.createElement("button");
+        prepBtn.type = "button";
+        prepBtn.className = "btn btn-primary btn-sm";
+        prepBtn.textContent = "Start Prep 👨‍🍳";
+        prepBtn.title = "Start preparing this order";
+        prepBtn.addEventListener("click", async () => {
+          prepBtn.disabled = true;
+          prepBtn.innerHTML = `<span class="spinner spinner-sm"></span>`;
+          const res = await updateOrderStatus(order.id, "preparing");
+          if (!res.success) {
+            showToast("Error: " + res.error, "⚠️");
+            prepBtn.disabled = false;
+            prepBtn.innerHTML = `<svg class="icon-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6v-7.13z"></path><line x1="6" y1="17" x2="18" y2="17"></line></svg> Start Prep`;
+          } else {
+            showToast("Order moved to Preparing", "👨‍🍳");
+          }
+        });
+        prepBtn.innerHTML = `<svg class="icon-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6v-7.13z"></path><line x1="6" y1="17" x2="18" y2="17"></line></svg> Start Prep`;
+        actionsDiv.appendChild(prepBtn);
+
+        // Cancel Button (with inline confirm, no popup)
+        const cancelBtn = document.createElement("button");
+        cancelBtn.type = "button";
+        cancelBtn.className = "btn btn-outline btn-sm";
+        cancelBtn.style.color = "#b91c1c";
+        cancelBtn.style.borderColor = "#fca5a5";
+        cancelBtn.style.padding = "0.25rem 0.55rem";
+        cancelBtn.style.fontSize = "0.78rem";
+        cancelBtn.innerHTML = `<svg class="icon-svg" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Cancel`;
+        cancelBtn.title = "Cancel this order";
+        cancelBtn.addEventListener("click", showInlineCancelConfirm);
+        actionsDiv.appendChild(cancelBtn);
+
+      } else if (order.status === "preparing") {
+        // Mark Ready Button
+        const readyBtn = document.createElement("button");
+        readyBtn.type = "button";
+        readyBtn.className = "btn btn-secondary btn-sm";
+        readyBtn.style.backgroundColor = "var(--status-ready-bg)";
+        readyBtn.style.color = "var(--status-ready-text)";
+        readyBtn.style.borderColor = "var(--status-ready-border)";
+        readyBtn.innerHTML = `<svg class="icon-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg> Mark Ready`;
+        readyBtn.title = "Mark order ready for customer pickup";
+        readyBtn.addEventListener("click", async () => {
+          readyBtn.disabled = true;
+          readyBtn.innerHTML = `<span class="spinner spinner-sm"></span>`;
+          const res = await updateOrderStatus(order.id, "ready");
+          if (!res.success) {
+            showToast("Error: " + res.error, "⚠️");
+            readyBtn.disabled = false;
+            readyBtn.innerHTML = `<svg class="icon-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg> Mark Ready`;
+          } else {
+            showToast("Order marked Ready for Pickup! ☕", "✅");
+          }
+        });
+        actionsDiv.appendChild(readyBtn);
+
+        // Undo Button: Move back one step to "received"
+        const undoBtn = document.createElement("button");
+        undoBtn.type = "button";
+        undoBtn.className = "btn btn-outline btn-sm";
+        undoBtn.style.padding = "0.25rem 0.55rem";
+        undoBtn.style.fontSize = "0.78rem";
+        undoBtn.innerHTML = `<svg class="icon-svg" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg> Undo`;
+        undoBtn.title = "Undo: move back one step to Received";
+        undoBtn.addEventListener("click", async () => {
+          undoBtn.disabled = true;
+          undoBtn.innerHTML = `<span class="spinner spinner-sm"></span>`;
+          const res = await updateOrderStatus(order.id, "received");
+          if (!res.success) {
+            showToast("Error moving back: " + res.error, "⚠️");
+            undoBtn.disabled = false;
+            undoBtn.innerHTML = `<svg class="icon-svg" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg> Undo`;
+          } else {
+            showToast("Moved order back to Received", "↩️");
+          }
+        });
+        actionsDiv.appendChild(undoBtn);
+
+        // Cancel Button (with inline confirm, no popup)
+        const cancelBtn = document.createElement("button");
+        cancelBtn.type = "button";
+        cancelBtn.className = "btn btn-outline btn-sm";
+        cancelBtn.style.color = "#b91c1c";
+        cancelBtn.style.borderColor = "#fca5a5";
+        cancelBtn.style.padding = "0.25rem 0.55rem";
+        cancelBtn.style.fontSize = "0.78rem";
+        cancelBtn.innerHTML = `<svg class="icon-svg" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Cancel`;
+        cancelBtn.title = "Cancel this order";
+        cancelBtn.addEventListener("click", showInlineCancelConfirm);
+        actionsDiv.appendChild(cancelBtn);
+
+      } else if (order.status === "ready") {
+        // Picked up Button: moves to completed, leaves the board
+        const pickupBtn = document.createElement("button");
+        pickupBtn.type = "button";
+        pickupBtn.className = "btn btn-primary btn-sm";
+        pickupBtn.style.backgroundColor = "#059669";
+        pickupBtn.style.borderColor = "#047857";
+        pickupBtn.innerHTML = `<svg class="icon-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg> Picked up`;
+        pickupBtn.title = "Customer picked up order (completes order and removes from board)";
+        pickupBtn.addEventListener("click", async () => {
+          pickupBtn.disabled = true;
+          pickupBtn.innerHTML = `<span class="spinner spinner-sm"></span>`;
+          const res = await updateOrderStatus(order.id, "completed");
+          if (!res.success) {
+            showToast("Error completing order: " + res.error, "⚠️");
+            pickupBtn.disabled = false;
+            pickupBtn.innerHTML = `<svg class="icon-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg> Picked up`;
+          } else {
+            showToast("Order completed and picked up! ✅", "☕");
+          }
+        });
+        actionsDiv.appendChild(pickupBtn);
+
+        // Undo Button: Move back one step to "preparing"
+        const undoBtn = document.createElement("button");
+        undoBtn.type = "button";
+        undoBtn.className = "btn btn-outline btn-sm";
+        undoBtn.style.padding = "0.25rem 0.55rem";
+        undoBtn.style.fontSize = "0.78rem";
+        undoBtn.innerHTML = `<svg class="icon-svg" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg> Undo`;
+        undoBtn.title = "Undo: move back one step to Preparing";
+        undoBtn.addEventListener("click", async () => {
+          undoBtn.disabled = true;
+          undoBtn.innerHTML = `<span class="spinner spinner-sm"></span>`;
+          const res = await updateOrderStatus(order.id, "preparing");
+          if (!res.success) {
+            showToast("Error moving back: " + res.error, "⚠️");
+            undoBtn.disabled = false;
+            undoBtn.innerHTML = `<svg class="icon-svg" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg> Undo`;
+          } else {
+            showToast("Moved order back to Preparing", "↩️");
+          }
+        });
+        actionsDiv.appendChild(undoBtn);
+      }
+
+      card.appendChild(footer);
+      return card;
+    }
+
+    // Render orders into the 3 columns
+    function renderKanbanBoard(orders) {
+      cardsReceived.innerHTML = "";
+      cardsPreparing.innerHTML = "";
+      cardsReady.innerHTML = "";
+
+      let countR = 0;
+      let countP = 0;
+      let countD = 0;
+
+      orders.forEach((order) => {
+        const card = createKanbanCard(order);
+
+        if (order.status === "received") {
+          cardsReceived.appendChild(card);
+          countR++;
+        } else if (order.status === "preparing") {
+          cardsPreparing.appendChild(card);
+          countP++;
+        } else if (order.status === "ready") {
+          cardsReady.appendChild(card);
+          countD++;
+        }
+      });
+
+      countReceived.textContent = countR;
+      countPreparing.textContent = countP;
+      countReady.textContent = countD;
+
+      const activeTotal = countR + countP + countD;
+      totalActiveOrdersBadge.textContent = `${activeTotal} active orders`;
+      if (tabOrderCountBadge) tabOrderCountBadge.textContent = activeTotal;
+
+      // Empty column states
+      if (countR === 0) {
+        cardsReceived.innerHTML = `<p style="text-align: center; color: var(--color-text-muted); font-size: 0.85rem; padding: 2rem 0;">No incoming orders.</p>`;
+      }
+      if (countP === 0) {
+        cardsPreparing.innerHTML = `<p style="text-align: center; color: var(--color-text-muted); font-size: 0.85rem; padding: 2rem 0;">No orders currently in prep.</p>`;
+      }
+      if (countD === 0) {
+        cardsReady.innerHTML = `<p style="text-align: center; color: var(--color-text-muted); font-size: 0.85rem; padding: 2rem 0;">No orders waiting for pickup.</p>`;
+      }
+    }
+
+    // Render Order History & Today's Sales Summary (Requirements 3 & 4)
+    function renderOrderHistory(orders) {
+      const tbody = document.getElementById("historyTableBody");
+      const badge = document.getElementById("historyOrdersCountBadge");
+      const salesCount = document.getElementById("salesTodayCount");
+      const salesRev = document.getElementById("salesTodayRevenue");
+      const salesTop = document.getElementById("salesTopItem");
+
+      if (badge) badge.textContent = `${orders.length} recorded`;
+
+      // 1. Calculate Today's Sales Summary in JavaScript from loaded orders
+      const now = new Date();
+      const todayString = now.toDateString();
+
+      const todayCompleted = orders.filter((o) => {
+        if (o.status !== "completed") return false;
+        if (!o.createdAt) return false;
+        const d = o.createdAt.toDate ? o.createdAt.toDate() : (o.createdAt.seconds ? new Date(o.createdAt.seconds * 1000) : null);
+        return d && d.toDateString() === todayString;
+      });
+
+      const count = todayCompleted.length;
+      let totalRevenue = 0;
+      const itemFrequencies = {};
+
+      todayCompleted.forEach((o) => {
+        totalRevenue += Number(o.total) || 0;
+        if (Array.isArray(o.items)) {
+          o.items.forEach((it) => {
+            const name = it.name || "Item";
+            const qty = Number(it.qty) || 1;
+            itemFrequencies[name] = (itemFrequencies[name] || 0) + qty;
+          });
+        }
+      });
+
+      let topItem = "None yet";
+      let topQty = 0;
+      for (const [name, qty] of Object.entries(itemFrequencies)) {
+        if (qty > topQty) {
+          topQty = qty;
+          topItem = `${name} (${qty} sold)`;
+        }
+      }
+
+      // If no completed orders today yet, find best seller from all completed orders
+      if (topItem === "None yet") {
+        const allCompleted = orders.filter((o) => o.status === "completed");
+        const allItemFreq = {};
+        allCompleted.forEach((o) => {
+          if (Array.isArray(o.items)) {
+            o.items.forEach((it) => {
+              const name = it.name || "Item";
+              const qty = Number(it.qty) || 1;
+              allItemFreq[name] = (allItemFreq[name] || 0) + qty;
+            });
+          }
+        });
+        for (const [name, qty] of Object.entries(allItemFreq)) {
+          if (qty > topQty) {
+            topQty = qty;
+            topItem = `${name} (${qty} sold)`;
+          }
+        }
+      }
+
+      if (salesCount) salesCount.textContent = count;
+      if (salesRev) salesRev.textContent = formatPrice(totalRevenue);
+      if (salesTop) salesTop.textContent = topItem;
+
+      // 2. Render Order History Table Rows (Nicknames, items, total in ₹, time, status)
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      if (orders.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" style="text-align: center; padding: 2rem; color: var(--color-text-muted);">
+              No completed or cancelled orders recorded yet.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      orders.forEach((order) => {
+        const tr = document.createElement("tr");
+        tr.style.borderBottom = "1px solid var(--color-border-subtle)";
+
+        // Customer Nickname
+        const tdNick = document.createElement("td");
+        tdNick.style.padding = "0.75rem 0.5rem";
+        tdNick.style.fontWeight = "700";
+        tdNick.textContent = order.customerName || (order.userEmail ? order.userEmail.split("@")[0] : "Customer");
+        tr.appendChild(tdNick);
+
+        // Items Ordered
+        const tdItems = document.createElement("td");
+        tdItems.style.padding = "0.75rem 0.5rem";
+        tdItems.style.fontSize = "0.88rem";
+        if (Array.isArray(order.items) && order.items.length > 0) {
+          tdItems.textContent = order.items.map((i) => `${i.qty}× ${i.name}`).join(", ");
+        } else {
+          tdItems.textContent = "—";
+        }
+        tr.appendChild(tdItems);
+
+        // Total in INR (₹)
+        const tdTotal = document.createElement("td");
+        tdTotal.style.padding = "0.75rem 0.5rem";
+        tdTotal.style.fontWeight = "700";
+        tdTotal.style.color = "var(--color-primary)";
+        tdTotal.textContent = formatPrice(order.total || 0);
+        tr.appendChild(tdTotal);
+
+        // Order Time
+        const tdTime = document.createElement("td");
+        tdTime.style.padding = "0.75rem 0.5rem";
+        tdTime.style.fontSize = "0.82rem";
+        tdTime.style.color = "var(--color-text-muted)";
+        tdTime.textContent = formatOrderDate(order.createdAt);
+        tr.appendChild(tdTime);
+
+        // Status Badge
+        const tdStatus = document.createElement("td");
+        tdStatus.style.padding = "0.75rem 0.5rem";
+        const statusSpan = document.createElement("span");
+        if (order.status === "completed") {
+          statusSpan.className = "badge badge-ready";
+          statusSpan.style.background = "#d1fae5";
+          statusSpan.style.color = "#065f46";
+          statusSpan.style.borderColor = "#a7f3d0";
+          statusSpan.innerHTML = `<svg class="icon-svg" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg> Picked Up`;
+        } else if (order.status === "cancelled") {
+          statusSpan.className = "badge badge-soldout";
+          statusSpan.style.background = "#fee2e2";
+          statusSpan.style.color = "#991b1b";
+          statusSpan.style.borderColor = "#fca5a5";
+          statusSpan.innerHTML = `<svg class="icon-svg" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Cancelled`;
+        } else {
+          statusSpan.className = "badge";
+          statusSpan.textContent = order.status || "Unknown";
+        }
+        tdStatus.appendChild(statusSpan);
+        tr.appendChild(tdStatus);
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Check authorization and start board
+    async function verifyAndLoadBoard(user) {
+      if (unsubscribeAllOrders) {
+        unsubscribeAllOrders();
+        unsubscribeAllOrders = null;
+      }
+      if (unsubscribeCatalogMenu) {
+        unsubscribeCatalogMenu();
+        unsubscribeCatalogMenu = null;
+      }
+      if (unsubscribeHistoryOrders) {
+        unsubscribeHistoryOrders();
+        unsubscribeHistoryOrders = null;
+      }
+
+      if (!user) {
+        staffLoginCard.style.display = "block";
+        notStaffCard.style.display = "none";
+        boardContainer.style.display = "none";
+        return;
+      }
+
+      staffLoginCard.style.display = "none";
+
+      const isOwner = await checkIfOwner(user.uid);
+      if (!isOwner) {
+        notStaffCard.style.display = "block";
+        boardContainer.style.display = "none";
+        loggedCustomerEmail.textContent = user.email || "Customer";
+        return;
+      }
+
+      // User is verified owner!
+      notStaffCard.style.display = "none";
+      boardContainer.style.display = "block";
+
+      // Initialize live preview
+      updateLivePreview();
+
+      // Subscribe to active orders (received, preparing, ready) in real time
+      unsubscribeAllOrders = subscribeToActiveOrders(
+        (orders) => {
+          ownerErrorAlert.style.display = "none";
+          renderKanbanBoard(orders);
+        },
+        (error) => {
+          ownerErrorAlert.textContent = "Error fetching orders queue: " + error.message;
+          ownerErrorAlert.style.display = "block";
+        }
+      );
+
+      // Subscribe to order history (completed, cancelled) in real time
+      unsubscribeHistoryOrders = subscribeToOrderHistory(
+        (historyOrders) => {
+          renderOrderHistory(historyOrders);
+        },
+        (error) => {
+          console.error("Error loading order history:", error);
+        }
+      );
+
+      // Subscribe to catalog menu in real time for management table
+      unsubscribeCatalogMenu = subscribeToMenu(
+        (items) => {
+          renderOwnerCatalog(items);
+        },
+        (error) => {
+          console.error("Error loading owner catalog:", error);
+        }
+      );
+    }
+
+    // Watch auth changes
+    subscribeToAuthState((user) => {
+      activeUser = user;
+      verifyAndLoadBoard(user);
+    });
+  </script>
+</body>
+</html>

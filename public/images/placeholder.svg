@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260">
+  <defs>
+    <linearGradient id="phGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdfbf7" />
+      <stop offset="100%" stop-color="#f4e8d8" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="260" fill="url(#phGrad)" />
+  <circle cx="200" cy="120" r="48" fill="#e8d8c3" />
+  <text x="200" y="132" font-family="system-ui, sans-serif" font-size="38" text-anchor="middle">☕</text>
+  <text x="200" y="195" font-family="'Playfair Display', serif" font-weight="600" font-size="16" fill="#75523a" text-anchor="middle">CafeLive Hyderabad</text>
+</svg>
+

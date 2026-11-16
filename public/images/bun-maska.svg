@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260">
+  <defs>
+    <linearGradient id="bmBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a180e" />
+      <stop offset="100%" stop-color="#4a2c1b" />
+    </linearGradient>
+    <linearGradient id="bunGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e89e52" />
+      <stop offset="60%" stop-color="#ba6822" />
+      <stop offset="100%" stop-color="#733b0e" />
+    </linearGradient>
+    <linearGradient id="butterGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff8d6" />
+      <stop offset="100%" stop-color="#fae27d" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="260" fill="url(#bmBg)" />
+  <circle cx="200" cy="130" r="95" fill="#f39c12" opacity="0.12" />
+  <!-- Plate -->
+  <ellipse cx="200" cy="190" rx="130" ry="24" fill="#140b06" />
+  <ellipse cx="200" cy="186" rx="120" ry="20" fill="#f4ede3" stroke="#d5c1ad" stroke-width="2" />
+  <!-- Lower Bun Half -->
+  <path d="M 120,165 Q 200,185 280,165 Q 280,150 200,150 Q 120,150 120,165 Z" fill="#96521a" />
+  <!-- Generous White Butter / Maska filling -->
+  <path d="M 115,152 Q 200,160 285,152 Q 280,140 200,140 Q 120,140 115,152 Z" fill="url(#butterGrad)" />
+  <ellipse cx="160" cy="148" rx="20" ry="6" fill="#fffef0" />
+  <!-- Top Bun Dome -->
+  <path d="M 118,142 C 118,80 282,80 282,142 Q 200,152 118,142 Z" fill="url(#bunGrad)" />
+  <!-- Gloss shine on bun top -->
+  <ellipse cx="180" cy="100" rx="35" ry="12" fill="#ffcf96" opacity="0.4" transform="rotate(-10, 180, 100)" />
+</svg>
+

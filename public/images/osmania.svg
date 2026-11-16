@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260">
+  <defs>
+    <linearGradient id="obBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3a2012" />
+      <stop offset="100%" stop-color="#1f1008" />
+    </linearGradient>
+    <linearGradient id="bisc" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde5b9" />
+      <stop offset="50%" stop-color="#e2aa61" />
+      <stop offset="100%" stop-color="#ae6f22" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="260" fill="url(#obBg)" />
+  <circle cx="200" cy="130" r="90" fill="#f39c12" opacity="0.15" />
+  <!-- Biscuit 1 -->
+  <g transform="translate(140, 110)">
+    <ellipse cx="60" cy="50" rx="55" ry="32" fill="#582a10" opacity="0.5" />
+    <ellipse cx="55" cy="42" rx="52" ry="28" fill="url(#bisc)" stroke="#925619" stroke-width="2" />
+    <ellipse cx="55" cy="42" rx="38" ry="18" fill="none" stroke="#753d07" stroke-width="1.5" stroke-dasharray="5,3" />
+    <circle cx="55" cy="42" r="4" fill="#753d07" />
+  </g>
+  <!-- Biscuit 2 -->
+  <g transform="translate(195, 75) rotate(15)">
+    <ellipse cx="55" cy="42" rx="52" ry="28" fill="url(#bisc)" stroke="#fbe4b5" stroke-width="2" />
+    <ellipse cx="55" cy="42" rx="38" ry="18" fill="none" stroke="#753d07" stroke-width="1.5" stroke-dasharray="5,3" />
+    <circle cx="55" cy="42" r="4" fill="#753d07" />
+  </g>
+</svg>
+

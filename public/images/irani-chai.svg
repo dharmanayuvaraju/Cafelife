@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260">
+  <defs>
+    <linearGradient id="icBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2c160c" />
+      <stop offset="100%" stop-color="#4d2410" />
+    </linearGradient>
+    <radialGradient id="chaiGlow" cx="50%" cy="55%" r="45%">
+      <stop offset="0%" stop-color="#f39c12" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#2c160c" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="teaColor" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f5dbb0" />
+      <stop offset="30%" stop-color="#d48a3a" />
+      <stop offset="100%" stop-color="#8c4717" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="260" fill="url(#icBg)" />
+  <circle cx="200" cy="140" r="110" fill="url(#chaiGlow)" />
+  <!-- Saucer -->
+  <ellipse cx="200" cy="205" rx="90" ry="16" fill="#150a04" />
+  <ellipse cx="200" cy="200" rx="85" ry="14" fill="#d4a373" />
+  <ellipse cx="200" cy="198" rx="55" ry="8" fill="#582a10" />
+  <!-- Cutting Chai Glass -->
+  <path d="M 160,80 L 175,190 Q 200,198 225,190 L 240,80 Q 200,72 160,80 Z" fill="rgba(255,255,255,0.08)" stroke="#f6d365" stroke-width="1.5" />
+  <path d="M 165,100 L 176,186 Q 200,192 224,186 L 235,100 Q 200,94 165,100 Z" fill="url(#teaColor)" />
+  <!-- Malai top -->
+  <ellipse cx="200" cy="100" rx="35" ry="7" fill="#fff5ea" />
+  <!-- Steam -->
+  <path d="M 195,75 Q 185,55 198,35" stroke="#ffffff" stroke-width="2.5" fill="none" opacity="0.4" stroke-linecap="round" />
+  <path d="M 205,70 Q 218,50 206,30" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.3" stroke-linecap="round" />
+</svg>
+

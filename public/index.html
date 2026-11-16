@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CafeLive Hyderabad - Authentic Irani Chai & Artisanal Bakes</title>
+  <meta name="description" content="Authentic Hyderabadi Irani Chai, Osmania Biscuits, Luqmi, and fresh artisanal bakery specials with real-time live order tracking.">
+
+  <!-- Open Graph / WhatsApp sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cafelive-e1b7f.web.app/">
+  <meta property="og:title" content="CafeLive Hyderabad - Authentic Irani Chai & Artisanal Bakes">
+  <meta property="og:description" content="Authentic Hyderabadi Irani Chai, Osmania Biscuits, Luqmi, and fresh artisanal bakery specials with real-time live order tracking.">
+  <meta property="og:image" content="https://cafelive-e1b7f.web.app/images/hero.png">
+  <meta property="og:image:alt" content="CafeLive Hyderabad Irani Chai and Specialties">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://cafelive-e1b7f.web.app/">
+  <meta name="twitter:title" content="CafeLive Hyderabad - Authentic Irani Chai & Artisanal Bakes">
+  <meta name="twitter:description" content="Authentic Hyderabadi Irani Chai, Osmania Biscuits, Luqmi, and fresh artisanal bakery specials with real-time live order tracking.">
+  <meta name="twitter:image" content="https://cafelive-e1b7f.web.app/images/hero.png">
+  
+  <!-- Google Fonts Preconnect & Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Customer Navigation Header (No Owner Board link here) -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="brand" aria-label="CafeLive Hyderabad Home">
+        <img src="images/logo.png" alt="CafeLive Logo" class="brand-logo-img" width="40" height="40">
+        <span>CafeLive</span>
+        <span class="brand-loc">Hyderabad</span>
+      </a>
+      <nav aria-label="Customer Navigation">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link active">Menu</a></li>
+          <li><a href="orders.html" class="nav-link">My Orders</a></li>
+          <li id="navSignInLi"><a href="#authSection" class="nav-link">Sign In</a></li>
+        </ul>
+      </nav>
+      <div id="authPill" class="user-info">
+        <a href="#authSection" class="btn btn-primary btn-sm" style="padding: 0.35rem 0.85rem; text-decoration: none; font-weight: 700;">Sign In</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Full-Width Hero Section -->
+  <section class="hero-wrapper" aria-label="Welcome Hero">
+    <img
+      src="images/hero.png"
+      alt="Artisanal Hyderabadi Chai in earthen clay kulhad with fragrant spices and gentle steam"
+      class="hero-backdrop"
+      width="1600"
+      height="900"
+      loading="eager"
+      fetchpriority="high"
+    >
+    <div class="hero-overlay"></div>
+    <div class="hero-inner">
+      <div class="hero-pill">
+        <span>✨</span> The Heart of Hyderabad in Every Sip
+      </div>
+      <h1 class="hero-title">
+        Authentic Hyderabadi <span class="hero-highlight">Irani Chai</span> &amp; Artisanal Bakes
+      </h1>
+      <p class="hero-subtitle">
+        Slow-brewed on dum with rich creamy milk, paired with warm Osmania biscuits, Bun Maska, and crispy keema luqmi. Watch your order update live on our kitchen board.
+      </p>
+      <div class="hero-cta-group">
+        <a href="#menuSection" class="btn btn-saffron">Order Now ☕</a>
+        <a href="#authSection" class="btn btn-white" id="heroAuthCta">Sign In / Join 👤</a>
+        <a href="orders.html" class="btn btn-outline" style="color: #fff; border-color: rgba(255,255,255,0.45);">Track Orders 📋</a>
+      </div>
+      <div class="hero-features-bar">
+        <div class="hero-feature-item">
+          <span>⚡</span> 100% Real-Time Order Board
+        </div>
+        <div class="hero-feature-item">
+          <span>☕</span> Traditional Dum Brewing
+        </div>
+        <div class="hero-feature-item">
+          <span>🍪</span> Fresh Osmania Baked Daily
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Container -->
+  <main class="container">
+    <!-- Authentication Section (Shown when logged out) -->
+    <section id="authSection" class="auth-card card" aria-labelledby="authHeading">
+      <div class="auth-tabs" role="tablist">
+        <button id="tabSignIn" class="auth-tab active" role="tab" aria-selected="true" type="button">
+          Sign In
+        </button>
+        <button id="tabSignUp" class="auth-tab" role="tab" aria-selected="false" type="button">
+          Create Account
+        </button>
+      </div>
+
+      <h2 id="authHeading" class="card-title" style="margin-bottom: 0.75rem;">Sign in to your account</h2>
+      <p style="font-size: 0.9rem; margin-bottom: 1.25rem;">Sign in to place orders and track live status from our kitchen.</p>
+
+      <!-- Dynamic Alert Banner for Errors/Success -->
+      <div id="authAlert" class="alert alert-error" style="display: none;" role="alert" aria-live="polite"></div>
+
+      <!-- Email / Password Form -->
+      <form id="authForm" novalidate>
+        <div class="form-group" id="authDisplayNameGroup" style="display: none;">
+          <label for="authDisplayName" class="form-label">Your Name / Nickname</label>
+          <input
+            type="text"
+            id="authDisplayName"
+            name="displayName"
+            class="form-input"
+            placeholder="e.g. Rahul, Sneha, Yuva"
+            autocomplete="name"
+            maxlength="30"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="authEmail" class="form-label">Email address</label>
+          <input
+            type="email"
+            id="authEmail"
+            name="email"
+            class="form-input"
+            placeholder="you@example.com"
+            autocomplete="username"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="authPassword" class="form-label">Password</label>
+          <input
+            type="password"
+            id="authPassword"
+            name="password"
+            class="form-input"
+            placeholder="At least 6 characters"
+            autocomplete="current-password"
+            minlength="6"
+            required
+          >
+        </div>
+
+        <button type="submit" id="authSubmitBtn" class="btn btn-primary btn-block">
+          <span>Sign In</span>
+        </button>
+
+        <!-- Inline Tab Switcher Hint -->
+        <p style="text-align: center; margin-top: 0.85rem; font-size: 0.88rem; color: var(--color-text-muted);">
+          <span id="authTogglePrompt">New customer?</span>
+          <button type="button" id="authToggleAction" style="background: none; border: none; color: var(--color-saffron); font-weight: 700; cursor: pointer; text-decoration: underline; padding: 0 0.25rem; font-family: inherit; font-size: inherit;">
+            Create an Account
+          </button>
+        </p>
+      </form>
+
+      <!-- Divider -->
+      <div class="divider">or</div>
+
+      <!-- Google Sign In Button -->
+      <button type="button" id="googleSignInBtn" class="btn btn-google btn-block">
+        <svg class="google-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.15z"/>
+          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.11 0-5.74-2.11-6.68-4.96H1.21v3.15C3.26 21.4 7.36 24 12 24z"/>
+          <path fill="#FBBC05" d="M5.32 14.24c-.24-.72-.38-1.5-.38-2.24s.14-1.52.38-2.24V6.61H1.21C.44 8.14 0 9.99 0 12s.44 3.86 1.21 5.39l4.11-3.15z"/>
+          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.36 0 3.26 2.6 1.21 6.61l4.11 3.15c.94-2.85 3.57-4.96 6.68-4.96z"/>
+        </svg>
+        <span>Continue with Google</span>
+      </button>
+    </section>
+
+    <!-- Signed-In User State Banner (Shown when user is authenticated) -->
+    <section id="userSection" class="card" style="display: none;">
+      <div class="card-header">
+        <h2 class="card-title">👋 Welcome to CafeLive!</h2>
+      </div>
+      <p style="margin-bottom: 0.5rem;">
+        Signed in as: <strong id="userEmailDisplay"></strong>
+      </p>
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.75rem;">
+        <a href="orders.html" class="btn btn-secondary btn-sm">📋 View My Orders</a>
+        <button type="button" id="userLogoutBtn" class="btn btn-outline btn-sm">Sign Out</button>
+      </div>
+    </section>
+
+    <!-- Order Placed Success Alert -->
+    <div id="orderSuccessAlert" class="alert alert-success" style="display: none;" role="alert">
+      <div style="width: 100%;">
+        <strong>🎉 Order Placed Successfully!</strong>
+        <p style="margin: 0.35rem 0;" id="orderSuccessText">Your order has been received by the cafe.</p>
+        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+          <a href="orders.html" class="btn btn-primary btn-sm">Track Live on My Orders &rarr;</a>
+          <button type="button" id="dismissSuccessBtn" class="btn btn-outline btn-sm">Order More</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: Why CafeLive -->
+    <section class="why-section" id="whyCafeLive" aria-labelledby="whyTitle">
+      <div class="section-title-wrap">
+        <span class="section-badge">Heritage &amp; Quality</span>
+        <h2 id="whyTitle" class="section-title">Why Hyderabad Loves CafeLive</h2>
+        <p>From the bustling lanes of Charminar to your live digital board, we bring traditional Hyderabadi cafe culture into the modern age.</p>
+      </div>
+      <div class="why-grid">
+        <article class="why-card reveal-on-scroll">
+          <span class="why-icon">🫖</span>
+          <h3>Traditional Dum Brewing</h3>
+          <p>We brew our black tea decoction and creamy milk in separate heavy brass vessels on dum, ensuring that unmistakable rich caramelized flavor.</p>
+        </article>
+        <article class="why-card reveal-on-scroll">
+          <span class="why-icon">⚡</span>
+          <h3>100% Real-Time Board</h3>
+          <p>No waiting in confusion. Every order appears on our kitchen Kanban board and updates live on your phone from prep to pickup.</p>
+        </article>
+        <article class="why-card reveal-on-scroll">
+          <span class="why-icon">🍪</span>
+          <h3>Legendary Osmania &amp; Bakes</h3>
+          <p>Salted sweet Osmania biscuits baked fresh every single morning, ready to be dunked straight into your steaming cutting chai.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Section: How It Works (3 Steps) -->
+    <section class="steps-section" id="howItWorks" aria-labelledby="stepsTitle">
+      <div class="section-title-wrap">
+        <span class="section-badge">Simple 3-Step Process</span>
+        <h2 id="stepsTitle" class="section-title">How It Works</h2>
+        <p>Order fresh cafe favorites effortlessly in three seamless steps.</p>
+      </div>
+      <div class="steps-grid">
+        <article class="step-card reveal-on-scroll">
+          <div class="step-number">1</div>
+          <h3>Pick from the Menu</h3>
+          <p>Browse our authentic selection of hot Irani chai, coffees, bakery delights, and savory snacks priced in Indian Rupees (₹).</p>
+        </article>
+        <article class="step-card reveal-on-scroll">
+          <div class="step-number">2</div>
+          <h3>One-Tap Checkout</h3>
+          <p>Add to your cart, adjust quantities, and place your order instantly with secure Firebase Authentication.</p>
+        </article>
+        <article class="step-card reveal-on-scroll">
+          <div class="step-number">3</div>
+          <h3>Watch Live &amp; Collect</h3>
+          <p>Track your order live as the barista receives, prepares, and marks it ready for pickup on our live order board.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menuSection" aria-labelledby="menuTitle" style="scroll-margin-top: 80px;">
+      <div class="section-header">
+        <div>
+          <h2 id="menuTitle" class="card-title" style="font-size: 1.6rem;">☕ Hyderabad Cafe Menu</h2>
+          <p style="color: var(--color-text-muted); font-size: 0.95rem;">Freshly made to order in Indian Rupees (₹)</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+          <span id="menuSyncStatus" class="badge badge-received" style="font-size: 0.75rem;">Connecting...</span>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <nav id="categoryFilters" class="category-filters" aria-label="Menu Categories" style="display: none;"></nav>
+
+      <!-- Firestore Error Alert if rules/permission fails -->
+      <div id="menuErrorAlert" class="alert alert-error" style="display: none;" role="alert"></div>
+
+      <!-- Menu Grid Container (Initial Shimmering Skeletons) -->
+      <div id="menuGrid" class="menu-grid">
+        <div class="skeleton-grid" style="grid-column: 1 / -1;">
+          <div class="skeleton-card"><div class="skeleton-image"></div><div class="skeleton-body"><div><div class="skeleton-line title"></div><div class="skeleton-line sub"></div></div><div class="skeleton-bottom-row"><div class="skeleton-line price"></div><div class="skeleton-line btn"></div></div></div></div>
+          <div class="skeleton-card"><div class="skeleton-image"></div><div class="skeleton-body"><div><div class="skeleton-line title"></div><div class="skeleton-line sub"></div></div><div class="skeleton-bottom-row"><div class="skeleton-line price"></div><div class="skeleton-line btn"></div></div></div></div>
+          <div class="skeleton-card"><div class="skeleton-image"></div><div class="skeleton-body"><div><div class="skeleton-line title"></div><div class="skeleton-line sub"></div></div><div class="skeleton-bottom-row"><div class="skeleton-line price"></div><div class="skeleton-line btn"></div></div></div></div>
+        </div>
+      </div>
+
+      <!-- See More Button Container for "All" Tab -->
+      <div id="seeMoreContainer" style="text-align: center; margin: 1.5rem 0 3rem 0; display: none;">
+        <button id="seeMoreBtn" type="button" class="btn btn-outline" style="min-width: 240px; font-weight: 700; border-radius: var(--radius-full); padding: 0.75rem 1.75rem; box-shadow: var(--shadow-sm); background: #ffffff;">
+          See More Items ↓
+        </button>
+      </div>
+    </section>
+
+    <!-- Cart Section (Docked / Sticky at Bottom) -->
+    <section id="cartSection" class="cart-card" style="display: none;" aria-labelledby="cartHeading">
+      <div class="cart-header">
+        <h3 id="cartHeading" class="card-title" style="font-size: 1.15rem; margin: 0;">
+          🛒 Your Cart (<span id="cartCount">0</span> <span id="cartItemLabel">items</span>)
+        </h3>
+        <button type="button" id="clearCartBtn" class="btn btn-outline btn-sm" style="padding: 0.2rem 0.6rem; min-height: 28px;">
+          Clear
+        </button>
+      </div>
+
+      <ul id="cartItemsList" class="cart-items-list" aria-label="Cart Items"></ul>
+
+      <div class="cart-summary">
+        <span>Grand Total:</span>
+        <span id="cartTotalPrice" style="color: var(--color-primary); font-size: 1.35rem;">₹0</span>
+      </div>
+
+      <!-- Customer Nickname Input Field for Barista Callout -->
+      <div class="form-group" style="margin-bottom: 0.85rem; background: var(--color-surface-subtle); padding: 0.75rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+        <label for="orderCustomerName" class="form-label" style="font-size: 0.85rem; display: flex; justify-content: space-between;">
+          <span>👤 Your Name / Nickname:</span>
+          <span style="font-weight: normal; color: var(--color-text-muted); font-size: 0.8rem;">(Called by barista)</span>
+        </label>
+        <input
+          type="text"
+          id="orderCustomerName"
+          class="form-input"
+          placeholder="e.g. Yuva, Rahul, Sneha"
+          maxlength="30"
+          style="padding: 0.55rem 0.75rem; background: #fff;"
+        >
+      </div>
+
+      <div id="cartErrorAlert" class="alert alert-error" style="display: none; margin-bottom: 0.75rem;"></div>
+
+      <button type="button" id="placeOrderBtn" class="btn btn-primary btn-block">
+        <span>Place Order Now</span>
+      </button>
+    </section>
+  </main>
+
+  <!-- Structured Rich Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="brand" style="color: #ffffff; margin-bottom: 0.75rem;">
+            <img src="images/logo.png" alt="CafeLive Logo" class="brand-logo-img" width="36" height="36" style="border-color: #f59e0b;">
+            <span>CafeLive Hyderabad</span>
+          </div>
+          <p>
+            Preserving the iconic culinary heritage of Hyderabad through authentic Irani chai, slow-cooked on dum, accompanied by fresh bakery delicacies and a transparent live kitchen queue.
+          </p>
+          <div class="footer-badge-wrap">
+            <span>●</span> Live Cloud Firestore Sync
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul class="footer-nav">
+            <li><a href="#menuSection">Artisanal Menu</a></li>
+            <li><a href="#whyCafeLive">Why CafeLive</a></li>
+            <li><a href="#howItWorks">How It Works</a></li>
+            <li><a href="orders.html">My Orders Tracker</a></li>
+            <li><a href="owner.html" style="color: #e58e26; font-weight: 600;">👨‍🍳 Staff / Barista Portal</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Cafe Hours</h4>
+          <p style="margin-bottom: 0.5rem;"><strong style="color: #fff;">Monday – Sunday:</strong></p>
+          <p>6:00 AM – 1:00 AM (Midnight Chai)</p>
+          <p style="margin-top: 0.75rem;"><strong style="color: #fff;">Location:</strong></p>
+          <p>Charminar Heritage &amp; Hitec City Hub, Hyderabad, India</p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 CafeLive Hyderabad. Built with vanilla HTML, modern CSS &amp; modular Firebase.</div>
+        <div>
+          <a href="owner.html" style="color: #ab9b90; text-decoration: none; margin-left: 1rem;">Staff Login &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Page Logic (ES Module) -->
+  <script type="module">
+    import {
+      loginWithEmail,
+      registerWithEmail,
+      loginWithGoogle,
+      logoutUser,
+      subscribeToAuthState,
+      setupHeaderAuthPill
+    } from "./js/auth.js?v=20261113b";
+    import {
+      subscribeToMenu,
+      seedSampleMenu,
+      createMenuItemElement,
+      formatPrice,
+      showToast,
+      getEffectivePrice
+    } from "./js/menu.js?v=20261113b";
+    import { placeOrder } from "./js/orders.js?v=20261113b";
+
+    // Setup global header user info
+    setupHeaderAuthPill("authPill");
+
+    // UI Elements - Auth
+    const authSection = document.getElementById("authSection");
+    const userSection = document.getElementById("userSection");
+    const tabSignIn = document.getElementById("tabSignIn");
+    const tabSignUp = document.getElementById("tabSignUp");
+    const authHeading = document.getElementById("authHeading");
+    const authAlert = document.getElementById("authAlert");
+    const authForm = document.getElementById("authForm");
+    const authDisplayNameGroup = document.getElementById("authDisplayNameGroup");
+    const authDisplayName = document.getElementById("authDisplayName");
+    const authEmail = document.getElementById("authEmail");
+    const authPassword = document.getElementById("authPassword");
+    const authSubmitBtn = document.getElementById("authSubmitBtn");
+    const googleSignInBtn = document.getElementById("googleSignInBtn");
+    const userEmailDisplay = document.getElementById("userEmailDisplay");
+    const userLogoutBtn = document.getElementById("userLogoutBtn");
+
+    // UI Elements - Menu
+    const menuGrid = document.getElementById("menuGrid");
+    const menuSyncStatus = document.getElementById("menuSyncStatus");
+    const categoryFilters = document.getElementById("categoryFilters");
+    const menuErrorAlert = document.getElementById("menuErrorAlert");
+
+    // UI Elements - Cart
+    const cartSection = document.getElementById("cartSection");
+    const cartCount = document.getElementById("cartCount");
+    const cartItemLabel = document.getElementById("cartItemLabel");
+    const cartItemsList = document.getElementById("cartItemsList");
+    const cartTotalPrice = document.getElementById("cartTotalPrice");
+    const clearCartBtn = document.getElementById("clearCartBtn");
+    const placeOrderBtn = document.getElementById("placeOrderBtn");
+    const cartErrorAlert = document.getElementById("cartErrorAlert");
+    const orderCustomerName = document.getElementById("orderCustomerName");
+
+    // UI Elements - Success Alert
+    const orderSuccessAlert = document.getElementById("orderSuccessAlert");
+    const orderSuccessText = document.getElementById("orderSuccessText");
+    const dismissSuccessBtn = document.getElementById("dismissSuccessBtn");
+
+    // Local State
+    let currentUser = null;
+    let authMode = "signin";
+    let menuItems = [];
+    let selectedCategory = "All";
+    let cart = []; // Array of { id, name, price, qty }
+
+    // Helpers
+    function showAuthAlert(message, type = "error") {
+      authAlert.className = `alert alert-${type}`;
+      authAlert.textContent = message;
+      authAlert.style.display = "block";
+    }
+
+    function clearAuthAlert() {
+      authAlert.textContent = "";
+      authAlert.style.display = "none";
+    }
+
+    const authToggleAction = document.getElementById("authToggleAction");
+    const authTogglePrompt = document.getElementById("authTogglePrompt");
+    const heroAuthCta = document.getElementById("heroAuthCta");
+    const navSignInLi = document.getElementById("navSignInLi");
+
+    // Unified Auth Mode Switcher (Sign In <-> Create Account)
+    function setAuthMode(mode) {
+      authMode = mode;
+      clearAuthAlert();
+      if (mode === "signup") {
+        if (authDisplayNameGroup) authDisplayNameGroup.style.display = "block";
+        tabSignUp.classList.add("active");
+        tabSignUp.setAttribute("aria-selected", "true");
+        tabSignIn.classList.remove("active");
+        tabSignIn.setAttribute("aria-selected", "false");
+        authHeading.textContent = "Create a new account";
+        authSubmitBtn.querySelector("span").textContent = "Create Account";
+        authPassword.setAttribute("autocomplete", "new-password");
+        if (authTogglePrompt) authTogglePrompt.textContent = "Already have an account?";
+        if (authToggleAction) authToggleAction.textContent = "Sign In instead";
+      } else {
+        if (authDisplayNameGroup) authDisplayNameGroup.style.display = "none";
+        tabSignIn.classList.add("active");
+        tabSignIn.setAttribute("aria-selected", "true");
+        tabSignUp.classList.remove("active");
+        tabSignUp.setAttribute("aria-selected", "false");
+        authHeading.textContent = "Sign in to your account";
+        authSubmitBtn.querySelector("span").textContent = "Sign In";
+        authPassword.setAttribute("autocomplete", "current-password");
+        if (authTogglePrompt) authTogglePrompt.textContent = "New customer?";
+        if (authToggleAction) authToggleAction.textContent = "Create an Account";
+      }
+    }
+
+    tabSignIn.addEventListener("click", () => setAuthMode("signin"));
+    tabSignUp.addEventListener("click", () => setAuthMode("signup"));
+
+    if (authToggleAction) {
+      authToggleAction.addEventListener("click", () => {
+        setAuthMode(authMode === "signin" ? "signup" : "signin");
+      });
+    }
+
+    if (heroAuthCta) {
+      heroAuthCta.addEventListener("click", (e) => {
+        e.preventDefault();
+        authSection.scrollIntoView({ behavior: "smooth" });
+        authSection.style.outline = "3px solid var(--color-saffron)";
+        setTimeout(() => { authSection.style.outline = "none"; }, 1500);
+        authEmail.focus();
+      });
+    }
+
+    // Form Submission: Login or Register
+    authForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      clearAuthAlert();
+
+      const email = authEmail.value.trim();
+      const password = authPassword.value;
+
+      if (!email || !password) {
+        showAuthAlert("Please fill in both email and password.");
+        return;
+      }
+
+      if (password.length < 6) {
+        showAuthAlert("Password must be at least 6 characters.");
+        return;
+      }
+
+      authSubmitBtn.disabled = true;
+      authSubmitBtn.innerHTML = `<span class="spinner spinner-sm"></span> Processing...`;
+
+      let result;
+      if (authMode === "signup") {
+        const displayName = authDisplayName ? authDisplayName.value.trim() : "";
+        result = await registerWithEmail(email, password, displayName);
+        if (result.success && displayName && orderCustomerName) {
+          orderCustomerName.value = displayName;
+        }
+      } else {
+        result = await loginWithEmail(email, password);
+      }
+
+      authSubmitBtn.disabled = false;
+      authSubmitBtn.innerHTML = `<span>${authMode === "signup" ? "Create Account" : "Sign In"}</span>`;
+
+      if (!result.success) {
+        showAuthAlert(result.error, "error");
+      } else {
+        authForm.reset();
+      }
+    });
+
+    // Google Sign-In Click
+    googleSignInBtn.addEventListener("click", async () => {
+      clearAuthAlert();
+      googleSignInBtn.disabled = true;
+      const originalText = googleSignInBtn.innerHTML;
+      googleSignInBtn.innerHTML = `<span class="spinner spinner-sm"></span> Connecting to Google...`;
+
+      const result = await loginWithGoogle();
+      googleSignInBtn.disabled = false;
+      googleSignInBtn.innerHTML = originalText;
+
+      if (!result.success) {
+        showAuthAlert(result.error, "error");
+      }
+    });
+
+    // Logout Click
+    userLogoutBtn.addEventListener("click", async () => {
+      userLogoutBtn.disabled = true;
+      userLogoutBtn.textContent = "Signing out...";
+      await logoutUser();
+      userLogoutBtn.disabled = false;
+      userLogoutBtn.textContent = "Sign Out";
+    });
+
+    // Dismiss Success Alert
+    if (dismissSuccessBtn) {
+      dismissSuccessBtn.addEventListener("click", () => {
+        orderSuccessAlert.style.display = "none";
+      });
+    }
+
+    // Real-Time Auth State Observer
+    subscribeToAuthState((user) => {
+      currentUser = user;
+      if (user) {
+        authSection.style.display = "none";
+        userSection.style.display = "block";
+        userEmailDisplay.textContent = user.email || "No email associated";
+        if (navSignInLi) navSignInLi.style.display = "none";
+        if (heroAuthCta) heroAuthCta.style.display = "none";
+        
+        // Auto-fill nickname placeholder or value if empty
+        if (orderCustomerName && !orderCustomerName.value) {
+          const suggestedName = user.displayName || (user.email ? user.email.split("@")[0] : "");
+          if (suggestedName) {
+            orderCustomerName.value = suggestedName.charAt(0).toUpperCase() + suggestedName.slice(1);
+          }
+        }
+      } else {
+        authSection.style.display = "block";
+        userSection.style.display = "none";
+        if (navSignInLi) navSignInLi.style.display = "inline-block";
+        if (heroAuthCta) heroAuthCta.style.display = "inline-flex";
+      }
+      updateCartButtonState();
+    });
+
+    // -------------------------------------------------------------
+    // MENU & CATALOG MANAGEMENT
+    // -------------------------------------------------------------
+
+    let isMenuExpanded = false;
+    const seeMoreContainer = document.getElementById("seeMoreContainer");
+    const seeMoreBtn = document.getElementById("seeMoreBtn");
+
+    if (seeMoreBtn) {
+      seeMoreBtn.addEventListener("click", () => {
+        isMenuExpanded = !isMenuExpanded;
+        renderMenuGrid();
+        if (!isMenuExpanded) {
+          document.getElementById("menuSection").scrollIntoView({ behavior: "smooth" });
+        }
+      });
+    }
+
+    function renderCategoryFilters(items) {
+      const categories = ["All", ...new Set(items.map((i) => i.category || "General"))];
+      categoryFilters.innerHTML = "";
+
+      categories.forEach((cat) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = `category-pill ${cat === selectedCategory ? "active" : ""}`;
+        btn.textContent = cat;
+        btn.addEventListener("click", () => {
+          isMenuExpanded = false; // Reset collapsed state when switching category
+          selectedCategory = cat;
+          renderCategoryFilters(items);
+          renderMenuGrid();
+        });
+        categoryFilters.appendChild(btn);
+      });
+
+      categoryFilters.style.display = categories.length > 2 ? "flex" : "none";
+    }
+
+    function renderMenuGrid() {
+      menuGrid.innerHTML = "";
+
+      const filtered = selectedCategory === "All"
+        ? menuItems
+        : menuItems.filter((i) => i.category === selectedCategory);
+
+      if (filtered.length === 0) {
+        if (seeMoreContainer) seeMoreContainer.style.display = "none";
+        const emptyDiv = document.createElement("div");
+        emptyDiv.className = "empty-state";
+        emptyDiv.style.gridColumn = "1 / -1";
+        emptyDiv.textContent = `No items found in "${selectedCategory}".`;
+        menuGrid.appendChild(emptyDiv);
+        return;
+      }
+
+      // In "All" tab, show initial 6 items with "See More" toggle button
+      let itemsToRender = filtered;
+      if (selectedCategory === "All") {
+        if (filtered.length > 6) {
+          if (seeMoreContainer) seeMoreContainer.style.display = "block";
+          if (!isMenuExpanded) {
+            itemsToRender = filtered.slice(0, 6);
+            if (seeMoreBtn) {
+              seeMoreBtn.innerHTML = `<span>See More Items (${filtered.length - 6} more) ↓</span>`;
+            }
+          } else {
+            if (seeMoreBtn) {
+              seeMoreBtn.innerHTML = `<span>Show Less Items ↑</span>`;
+            }
+          }
+        } else {
+          if (seeMoreContainer) seeMoreContainer.style.display = "none";
+        }
+      } else {
+        if (seeMoreContainer) seeMoreContainer.style.display = "none";
+      }
+
+      itemsToRender.forEach((item, index) => {
+        const card = createMenuItemElement(item, (selectedItem) => {
+          addToCart(selectedItem);
+        }, index);
+        menuGrid.appendChild(card);
+      });
+    }
+
+    // Scroll Reveal Observer
+    const scrollObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-revealed");
+          scrollObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll(".reveal-on-scroll").forEach((el) => scrollObserver.observe(el));
+
+    // Cart Management
+    function addToCart(item) {
+      orderSuccessAlert.style.display = "none";
+      const effPrice = getEffectivePrice(item);
+      const existing = cart.find((i) => i.id === item.id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({
+          id: item.id,
+          name: item.name,
+          price: effPrice,
+          originalPrice: item.price,
+          discountPercent: Number(item.discountPercent) || 0,
+          qty: 1
+        });
+      }
+
+      // Phase 2 Animation: Toast notification & Badge bounce
+      showToast(`Added ${item.name} to cart!`, "☕");
+      if (cartCount) {
+        cartCount.classList.remove("badge-bounce");
+        void cartCount.offsetWidth; // Force reflow
+        cartCount.classList.add("badge-bounce");
+      }
+
+      renderCart();
+    }
+
+    function updateCartItemQty(itemId, delta) {
+      const idx = cart.findIndex((i) => i.id === itemId);
+      if (idx === -1) return;
+
+      cart[idx].qty += delta;
+      if (cart[idx].qty <= 0) {
+        cart.splice(idx, 1);
+      }
+      renderCart();
+    }
+
+    function clearCart() {
+      cart = [];
+      renderCart();
+    }
+
+    clearCartBtn.addEventListener("click", clearCart);
+
+    function updateCartButtonState() {
+      if (!currentUser) {
+        placeOrderBtn.textContent = "Sign in to Place Order";
+        placeOrderBtn.classList.remove("btn-primary");
+        placeOrderBtn.classList.add("btn-secondary");
+      } else {
+        placeOrderBtn.textContent = "Place Order Now";
+        placeOrderBtn.classList.remove("btn-secondary");
+        placeOrderBtn.classList.add("btn-primary");
+      }
+    }
+
+    function renderCart() {
+      if (cart.length === 0) {
+        cartSection.style.display = "none";
+        return;
+      }
+
+      cartSection.style.display = "block";
+      cartItemsList.innerHTML = "";
+
+      let totalQty = 0;
+      let totalPrice = 0;
+
+      cart.forEach((item) => {
+        totalQty += item.qty;
+        totalPrice += item.qty * item.price;
+
+        const li = document.createElement("li");
+        li.className = "cart-item-row";
+
+        // Item Info
+        const infoDiv = document.createElement("div");
+        infoDiv.className = "cart-item-info";
+        const nameSpan = document.createElement("span");
+        nameSpan.className = "cart-item-name";
+        nameSpan.textContent = item.name; // Safe assignment
+        const unitPriceSpan = document.createElement("span");
+        unitPriceSpan.className = "cart-item-unit-price";
+        if (item.discountPercent > 0) {
+          unitPriceSpan.innerHTML = `<span style="font-weight: 700; color: var(--color-primary);">${formatPrice(item.price)}</span> <span style="text-decoration: line-through; opacity: 0.7; font-size: 0.85em; margin-inline: 0.2rem;">${formatPrice(item.originalPrice)}</span> <span class="badge-discount" style="font-size: 0.65rem; padding: 0.1rem 0.35rem;">${item.discountPercent}% OFF</span> each`;
+        } else {
+          unitPriceSpan.textContent = `${formatPrice(item.price)} each`;
+        }
+        infoDiv.appendChild(nameSpan);
+        infoDiv.appendChild(unitPriceSpan);
+
+        // Controls
+        const controlsDiv = document.createElement("div");
+        controlsDiv.className = "cart-item-controls";
+
+        const minusBtn = document.createElement("button");
+        minusBtn.type = "button";
+        minusBtn.className = "qty-btn";
+        minusBtn.textContent = "−";
+        minusBtn.setAttribute("aria-label", `Decrease quantity of ${item.name}`);
+        minusBtn.addEventListener("click", () => updateCartItemQty(item.id, -1));
+
+        const qtySpan = document.createElement("span");
+        qtySpan.style.minWidth = "20px";
+        qtySpan.style.textAlign = "center";
+        qtySpan.style.fontWeight = "600";
+        qtySpan.textContent = item.qty;
+
+        const plusBtn = document.createElement("button");
+        plusBtn.type = "button";
+        plusBtn.className = "qty-btn";
+        plusBtn.textContent = "+";
+        plusBtn.setAttribute("aria-label", `Increase quantity of ${item.name}`);
+        plusBtn.addEventListener("click", () => updateCartItemQty(item.id, 1));
+
+        const subtotalSpan = document.createElement("span");
+        subtotalSpan.style.fontWeight = "700";
+        subtotalSpan.style.marginLeft = "0.5rem";
+        subtotalSpan.textContent = formatPrice(item.qty * item.price);
+
+        controlsDiv.appendChild(minusBtn);
+        controlsDiv.appendChild(qtySpan);
+        controlsDiv.appendChild(plusBtn);
+        controlsDiv.appendChild(subtotalSpan);
+
+        li.appendChild(infoDiv);
+        li.appendChild(controlsDiv);
+        cartItemsList.appendChild(li);
+      });
+
+      cartCount.textContent = totalQty;
+      if (cartItemLabel) {
+        cartItemLabel.textContent = totalQty === 1 ? "item" : "items";
+      }
+      cartTotalPrice.textContent = formatPrice(totalPrice);
+      updateCartButtonState();
+    }
+
+    // Place Order Click Handler
+    placeOrderBtn.addEventListener("click", async () => {
+      cartErrorAlert.style.display = "none";
+
+      if (!currentUser) {
+        authSection.scrollIntoView({ behavior: "smooth" });
+        showAuthAlert("Please sign in or create an account to complete your order.", "error");
+        authEmail.focus();
+        return;
+      }
+
+      const nickname = orderCustomerName ? orderCustomerName.value.trim() : "";
+      if (!nickname) {
+        cartErrorAlert.textContent = "Please enter your Name / Nickname so our barista can call you when ready!";
+        cartErrorAlert.style.display = "block";
+        orderCustomerName.focus();
+        return;
+      }
+
+      placeOrderBtn.disabled = true;
+      placeOrderBtn.innerHTML = `<span class="spinner spinner-sm"></span> Submitting Order to Cafe...`;
+
+      const result = await placeOrder(currentUser, cart, nickname);
+
+      placeOrderBtn.disabled = false;
+      updateCartButtonState();
+
+      if (!result.success) {
+        cartErrorAlert.textContent = "Order failed: " + result.error;
+        cartErrorAlert.style.display = "block";
+      } else {
+        clearCart();
+        orderSuccessText.textContent = `Order #${result.orderId.slice(0, 7)} for ${result.customerName} has been received! Our barista is getting it ready.`;
+        orderSuccessAlert.style.display = "block";
+        orderSuccessAlert.scrollIntoView({ behavior: "smooth" });
+      }
+    });
+
+    // Real-Time Menu Subscription
+    subscribeToMenu(
+      (items) => {
+        menuErrorAlert.style.display = "none";
+        menuItems = items;
+        menuSyncStatus.className = "badge badge-ready";
+        menuSyncStatus.textContent = "● Live Sync";
+
+        if (items.length === 0) {
+          categoryFilters.style.display = "none";
+          menuGrid.innerHTML = `
+            <div class="empty-state" style="grid-column: 1 / -1;">
+              <h3 style="margin-bottom: 0.5rem; color: var(--color-primary);">Hyderabad Cafe Menu is Empty</h3>
+              <p style="margin-bottom: 1rem;">Click below to load authentic Irani Chai, Osmania Biscuits & snacks into Firestore:</p>
+              <button id="seedMenuBtn" type="button" class="btn btn-primary btn-sm">
+                🌱 Populate Hyderabad Cafe Menu (INR ₹)
+              </button>
+            </div>
+          `;
+
+          const seedBtn = document.getElementById("seedMenuBtn");
+          if (seedBtn) {
+            seedBtn.addEventListener("click", async () => {
+              seedBtn.disabled = true;
+              seedBtn.innerHTML = `<span class="spinner spinner-sm"></span> Loading Hyderabad items...`;
+              try {
+                await seedSampleMenu();
+              } catch (err) {
+                console.error("Seeding error:", err);
+                menuErrorAlert.textContent = "Failed to seed menu: " + err.message;
+                menuErrorAlert.style.display = "block";
+                seedBtn.disabled = false;
+                seedBtn.textContent = "Try Seeding Again";
+              }
+            });
+          }
+          return;
+        }
+
+        renderCategoryFilters(items);
+        renderMenuGrid();
+      },
+      (error) => {
+        menuSyncStatus.className = "badge badge-received";
+        menuSyncStatus.textContent = "Sync Paused";
+        menuErrorAlert.textContent = "Firestore Menu Error: " + error.message;
+        menuErrorAlert.style.display = "block";
+      }
+    );
+  </script>
+</body>
+</html>

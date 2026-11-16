@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260">
+  <defs>
+    <linearGradient id="lqBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#26140b" />
+      <stop offset="100%" stop-color="#472614" />
+    </linearGradient>
+    <linearGradient id="crust" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fedaa0" />
+      <stop offset="50%" stop-color="#d48f3b" />
+      <stop offset="100%" stop-color="#9a5214" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="260" fill="url(#lqBg)" />
+  <circle cx="200" cy="130" r="95" fill="#f39c12" opacity="0.12" />
+  <!-- Plate -->
+  <ellipse cx="200" cy="180" rx="130" ry="24" fill="#140b06" />
+  <ellipse cx="200" cy="176" rx="122" ry="20" fill="#f5ede3" stroke="#d5c1ad" stroke-width="2" />
+  <!-- Luqmi Square Pastry 1 -->
+  <g transform="translate(130, 95) rotate(-10)">
+    <rect x="0" y="0" width="95" height="75" rx="6" fill="#693714" opacity="0.4" transform="translate(4, 6)" />
+    <rect x="0" y="0" width="95" height="75" rx="6" fill="url(#crust)" stroke="#c28236" stroke-width="2" />
+    <!-- Crimp marks on edges -->
+    <line x1="6" y1="4" x2="6" y2="12" stroke="#753d07" stroke-width="2" />
+    <line x1="14" y1="4" x2="14" y2="12" stroke="#753d07" stroke-width="2" />
+    <line x1="22" y1="4" x2="22" y2="12" stroke="#753d07" stroke-width="2" />
+    <!-- Golden blister dots -->
+    <circle cx="35" cy="40" r="3" fill="#693714" opacity="0.4" />
+    <circle cx="65" cy="30" r="2.5" fill="#693714" opacity="0.4" />
+  </g>
+  <!-- Luqmi Square Pastry 2 -->
+  <g transform="translate(190, 85) rotate(15)">
+    <rect x="0" y="0" width="90" height="70" rx="6" fill="url(#crust)" stroke="#ffe7ba" stroke-width="1.5" />
+    <line x1="6" y1="4" x2="6" y2="12" stroke="#753d07" stroke-width="2" />
+    <line x1="14" y1="4" x2="14" y2="12" stroke="#753d07" stroke-width="2" />
+    <line x1="22" y1="4" x2="22" y2="12" stroke="#753d07" stroke-width="2" />
+    <circle cx="45" cy="35" r="3" fill="#693714" opacity="0.4" />
+  </g>
+</svg>
+
